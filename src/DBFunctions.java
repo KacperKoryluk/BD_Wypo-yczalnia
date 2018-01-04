@@ -4,11 +4,32 @@ import java.util.*;
 
 
 //TODO sprawdziæ dzia³anie zapytañ
-//Metody dodaj¹ce rekordy przyjmuj¹ za ma³o wartoœci, 
-//zrobiæ procedury dodaj¹ce klientów z okreœlonymi triggerami i wywo³ywaæ je z poziomu aplikacji
+
 public class DBFunctions {
+	private Connection con;
 	
-	public int addClient(Connection con, String ID, String firstName, String lastName, String PESEL, String eMail, String phoneNumber)
+	public DBFunctions()
+	{
+		try {
+			con = DBOperations.connect("system", "system");
+		} catch (SQLException e) {
+		
+			e.printStackTrace();
+		}
+	}
+	
+	/**
+	 * 
+	 * @param con
+	 * @param ID
+	 * @param firstName
+	 * @param lastName
+	 * @param PESEL
+	 * @param eMail
+	 * @param phoneNumber
+	 * @returns amount of rows altered, if -1 statement was not executed, if 1, client was added 
+	 */
+	public int addClient(String ID, String firstName, String lastName, String PESEL, String eMail, String phoneNumber)
 	{
 		Statement stmt = null;
 		int rows = -1;
@@ -24,8 +45,15 @@ public class DBFunctions {
 		
 		return rows;
 	}
-																				//Format YY-MM-DD
-	public int addBooking (Connection con, String ID, String clientID, String expirationDate)
+																				
+	/**
+	 * 
+	 * @param ID
+	 * @param clientID
+	 * @param expirationDate Format YY-MM-DD
+	 * @returns amount of rows altered, if -1 statement was not executed, if 1, booking was added
+	 */
+	public int addBooking ( String ID, String clientID, String expirationDate)
 	{
 		Statement stmt = null;
 		int rows = -1;
@@ -41,7 +69,16 @@ public class DBFunctions {
 		
 		return rows;
 	}
-	public int addEquipment(Connection con, String ID, String bookingID, String status, String category, String description)
+	/**
+	 * 
+	 * @param ID
+	 * @param bookingID
+	 * @param status
+	 * @param category
+	 * @param description
+	 * @returns amount of rows altered, if -1 statement was not executed, if 1, equipment was added
+	 */
+	public int addEquipment(String ID, String bookingID, String status, String category, String description)
 	{
 		
 		Statement stmt = null;
@@ -59,8 +96,12 @@ public class DBFunctions {
 		return rows;
 	}
 	
-	
-	public int deleteEquipment(Connection con, String ID)
+	/**
+	 * 
+	 * @param ID
+	 * @returns amount of rows altered, if -1 statement was not executed, if 1, equipment was removed
+	 */
+	public int deleteEquipment(String ID)
 	{
 		Statement stmt = null;
 		int rows = -1;
@@ -77,7 +118,12 @@ public class DBFunctions {
 		return rows;
 	}
 	
-	public int deleteBooking(Connection con, String ID)
+	/**
+	 * 
+	 * @param ID
+	 * @returns amount of rows altered, if -1 statement was not executed, if 1, booking was removed
+	 */
+	public int deleteBooking(String ID)
 	{
 		Statement stmt = null;
 		int rows = -1;
@@ -94,7 +140,7 @@ public class DBFunctions {
 		return rows;
 	}
 	
-	public int deleteClient(Connection con, String ID, String PESEL)
+	public int deleteClient(String ID, String PESEL)
 	{
 		Statement stmt = null;
 		int rows = -1;
@@ -111,7 +157,13 @@ public class DBFunctions {
 		return rows;
 	}
 	
-	public ArrayList<String> findClient(Connection con, String ID, String PESEL)
+	/**
+	 * 
+	 * @param ID
+	 * @param PESEL
+	 * @returns row with data of a specified client, if returned more than 1 row, you should worry.
+	 */
+	public ArrayList<String> findClient(String ID, String PESEL)
 	{
 		ArrayList<String> result = null;
 		try 
@@ -129,7 +181,12 @@ public class DBFunctions {
 		return result;
 	}
 	
-	public ArrayList<String> findEquipment(Connection con, String ID)
+	/**
+	 * 
+	 * @param ID
+	 * @returns row with data of a specified equipment, should return one row
+	 */
+	public ArrayList<String> findEquipment(String ID)
 	{
 		ArrayList<String> result = null;
 		try 
@@ -147,7 +204,34 @@ public class DBFunctions {
 		return result;
 	}
 	
-	public ArrayList<String> groupByCategory(Connection con)
+	/**
+	 * 
+	 * @param ID
+	 * @returns row with data of a specified booking, ONE row, more than one means tragedy
+	 */
+	public ArrayList<String> findBooking( String ID)
+	{
+		ArrayList<String> result = null;
+		try 
+		{
+			result = DBOperations.executeQuery(con, "select * from REZERWACJE where (ID_REZERWACJI = " + ID + ")");
+		}
+		catch(SQLException e)
+		{
+			e.printStackTrace();
+		} catch (Exception e) {
+			
+			e.printStackTrace();
+		}
+		
+		return result;
+	}
+	
+	/**
+	 * 
+	 * @returns How many items every category has, more than one row is okay
+	 */
+	public ArrayList<String> groupByCategory()
 	{
 		ArrayList<String> result = null;
 		
@@ -163,7 +247,11 @@ public class DBFunctions {
 		return result;
 	}
 	
-	public ArrayList<String> groupByStatus(Connection con)
+	/**
+	 * 
+	 * @returns How many items every status has
+	 */
+	public ArrayList<String> groupByStatus()
 	{
 ArrayList<String> result = null;
 		
@@ -179,7 +267,12 @@ ArrayList<String> result = null;
 		return result;
 	}
 	
-	public ArrayList<String> getTableContent(Connection con, String tableName)
+	/**
+	 * 
+	 * @param tableName
+	 * @returns select * from a specified table
+	 */
+	public ArrayList<String> getTableContent(String tableName)
 	{
 		ArrayList<String> result = null;
 		

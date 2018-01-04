@@ -7,15 +7,6 @@ public class TempEnvironment {
 		DBFunctions fun = new DBFunctions();
 		Connection c = null;
 		ArrayList<String> re = null;
-		try 
-		{
-			c = DBOperations.connect("system", "system");
-		} 
-		catch (SQLException e) 
-		{
-			
-			e.printStackTrace();
-		}
 		//re = fun.getTableContent(c, "klienci");
 		//for (String s : re)
 		//{

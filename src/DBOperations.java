@@ -15,7 +15,7 @@ public class DBOperations {
 	 * @return Connection
 	 * @throws SQLException
 	 */
-	//TODO przerobiæ adres na localhost
+	
 	public static Connection connect(String username, String password) throws SQLException{
 		Connection connection = null;
 		connection = DriverManager.getConnection(
