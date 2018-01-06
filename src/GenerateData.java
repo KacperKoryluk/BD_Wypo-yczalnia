@@ -1,7 +1,5 @@
 import java.util.ArrayList;
 
-import com.sun.security.ntlm.Client;
-
 public class GenerateData {
 	
 	private static ArrayList<String> Clients, Eq, Boo;
@@ -74,11 +72,39 @@ public class GenerateData {
 	
 	public static void addRowBoo(String ID, String IDEq, String BookDate, 
 								 String Status, String BookEnd) {
-		Clients.add(ID + "\t" + IDEq + "\t" + BookDate + "\t" + Status + "\t" + BookEnd);
+		Boo.add(ID + "\t" + IDEq + "\t" + BookDate + "\t" + Status + "\t" + BookEnd);
 	}
+	
 	public static void addRowEq(String ID, String IDBoo, String Status, 
 								String Cat, String Descr) {
-		Clients.add(ID + "\t" + IDBoo + "\t" + Status + "\t" + Cat + "\t" + Descr);
+		Eq.add(ID + "\t" + IDBoo + "\t" + Status + "\t" + Cat + "\t" + Descr);
+	}
+	
+	public static void updateClient(String ID, String Name, String Surname, 
+			String email, String PESEL, String phone) {
+		for (int i = 0; i < Clients.size(); i++) 
+			if (Clients.get(i).split("\t")[0].compareTo(ID) == 0) {
+				GenerateData.deleteRowClients(ID);
+				GenerateData.addRowClient(ID, Name, Surname, email, PESEL, phone);
+			}
+	}
+	
+	public static void updateEq(String ID, String IDBoo, String Status, 
+								String Cat, String Descr) {
+		for (int i = 0; i < Clients.size(); i++) 
+			if (Eq.get(i).split("\t")[0].compareTo(ID) == 0) {
+				GenerateData.deleteRowEq(ID);
+				GenerateData.addRowEq(ID, IDBoo, Status, Cat, Descr);
+			}
+	}
+	
+	public static void updateBoo(String ID, String IDEq, String BookDate, 
+			 String Status, String BookEnd) {
+		for (int i = 0; i < Clients.size(); i++) 
+			if (Boo.get(i).split("\t")[0].compareTo(ID) == 0) {
+				GenerateData.deleteRowBoo(ID);
+				GenerateData.addRowBoo(ID, IDEq, BookDate, Status, BookEnd);
+			}
 	}
 	
 	public static ArrayList<String> gibClientDataPls()throws Exception{

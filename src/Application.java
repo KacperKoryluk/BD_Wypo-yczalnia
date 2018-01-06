@@ -265,7 +265,7 @@ public class Application {
 				clientsPanel.setVisible(false);
 			}
 		});
-		btnClientsLogout.setBounds(490, 469, 149, 23);
+		btnClientsLogout.setBounds(490, 459, 149, 33);
 		clientsPanel.add(btnClientsLogout);
 		
 		JButton btnClientsBack = new JButton("Wr\u00F3\u0107");
@@ -275,16 +275,16 @@ public class Application {
 				menuPanel.setVisible(true);
 			}
 		});
-		btnClientsBack.setBounds(10, 469, 89, 23);
+		btnClientsBack.setBounds(10, 459, 89, 33);
 		clientsPanel.add(btnClientsBack);
 		
 		JLabel lblKlienci = new JLabel("Klienci");
 		lblKlienci.setHorizontalAlignment(SwingConstants.CENTER);
-		lblKlienci.setBounds(201, 0, 82, 25);
+		lblKlienci.setBounds(281, 0, 82, 25);
 		clientsPanel.add(lblKlienci);
 		
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(10, 24, 529, 434);
+		scrollPane.setBounds(10, 24, 629, 363);
 		clientsPanel.add(scrollPane);
 		scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
@@ -309,7 +309,7 @@ public class Application {
 				frame.setEnabled(false);
 			}
 		});
-		btnAddClient.setBounds(550, 36, 89, 45);
+		btnAddClient.setBounds(98, 398, 89, 45);
 		clientsPanel.add(btnAddClient);
 		
 		JButton btnDeleteClient = new JButton("Usu\u0144");
@@ -338,8 +338,19 @@ public class Application {
 				
 			}
 		});
-		btnDeleteClient.setBounds(549, 118, 90, 45);
+		btnDeleteClient.setBounds(431, 398, 90, 45);
 		clientsPanel.add(btnDeleteClient);
+		
+		JButton btnUpdate = new JButton("Aktualizuj");
+		btnUpdate.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				UpdateClientFrame frame2 = new UpdateClientFrame(frame);
+				frame2.setVisible(true);
+				frame.setEnabled(false);
+			}
+		});
+		btnUpdate.setBounds(228, 398, 161, 45);
+		clientsPanel.add(btnUpdate);
 		
 		
 		JPanel equipmentPanel = new JPanel();
@@ -404,15 +415,31 @@ public class Application {
 		
 		JLabel lblRezerwacje = new JLabel("Rezerwacje");
 		lblRezerwacje.setHorizontalAlignment(SwingConstants.CENTER);
-		lblRezerwacje.setBounds(174, 0, 120, 25);
+		lblRezerwacje.setBounds(255, 0, 120, 25);
 		bookingPanel.add(lblRezerwacje);
 		
 		JScrollPane scrollPane_2 = new JScrollPane();
-		scrollPane_2.setBounds(10, 24, 510, 434);
+		scrollPane_2.setBounds(10, 24, 629, 369);
 		bookingPanel.add(scrollPane_2);
 		
 		bookingTable = new JTable();
 		scrollPane_2.setViewportView(bookingTable);
+		
+		JButton btnAdd = new JButton("Dodaj");
+		btnAdd.setBounds(79, 414, 110, 44);
+		bookingPanel.add(btnAdd);
+		
+		JButton btnPay = new JButton("Op\u0142a\u0107");
+		btnPay.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
+		btnPay.setBounds(271, 414, 104, 44);
+		bookingPanel.add(btnPay);
+		
+		JButton btnArchive = new JButton("Archiwizuj");
+		btnArchive.setBounds(438, 414, 110, 44);
+		bookingPanel.add(btnArchive);
 		
 		btnEquipment.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -431,11 +458,6 @@ public class Application {
 						String[] data = resp.get(i).split("\t");
 						tableModel.addRow(data);
 					}
-//					for (int i = 0; i < tableModel.getRowCount(); i++) {
-//						for (int j = 0; j < tableModel.getColumnCount(); j++)
-//							System.out.print(tableModel.getValueAt(i, j) + " || ");
-//						System.out.println();
-//					}
 				} catch (Exception e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
@@ -461,12 +483,6 @@ public class Application {
 						String[] data = resp.get(i).split("\t");
 						tableModel.addRow(data);
 					}
-//					for (int i = 0; i < tableModel.getRowCount(); i++) {
-//						for (int j = 0; j < tableModel.getColumnCount(); j++)
-//							System.out.print(tableModel.getValueAt(i, j) + " || ");
-//						System.out.println();
-//					}
-				
 				} catch (Exception e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
@@ -507,10 +523,6 @@ public class Application {
 						lblPassword.setForeground(Color.RED);
 					}
 				}
-				
-				if (arg0.getKeyCode() == KeyEvent.VK_TAB) {
-					passwordField.requestFocusInWindow();
-				}
 			}
 		});
 		passwordField.addKeyListener(new KeyAdapter() {
@@ -545,10 +557,6 @@ public class Application {
 						lblLogin.setForeground(Color.RED);
 						lblPassword.setForeground(Color.RED);
 					}
-				}
-				
-				if (arg0.getKeyCode() == KeyEvent.VK_TAB) {
-					loginField.requestFocusInWindow();
 				}	
 			}
 		});
