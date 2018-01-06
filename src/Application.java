@@ -1,4 +1,5 @@
 import java.awt.EventQueue;
+import java.awt.Font;
 
 import javax.swing.JFrame;
 import java.awt.CardLayout;
@@ -6,29 +7,49 @@ import java.awt.Color;
 
 import javax.swing.JPanel;
 import javax.swing.JButton;
-import javax.swing.JTextPane;
 import javax.swing.JPasswordField;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
+import javax.swing.UIManager;
+import javax.swing.table.DefaultTableModel;
+
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.PrimitiveIterator.OfDouble;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+
 import javax.swing.JTextField;
 import javax.swing.JTable;
 import javax.swing.JScrollPane;
-import javax.swing.JScrollBar;
+
+import javax.swing.ListSelectionModel;
+import javax.swing.ScrollPaneConstants;
 
 public class Application {
 
 	private JFrame frame;
 	private JPasswordField passwordField;
 	private JTextField loginField;
-	private JTable clientsTable;
+	private static JTable clientsTable;
+	private static JTable equipmentTable;
+	private static JTable bookingTable;
 
+	public static JTable getClientsTable() {
+		return clientsTable;
+	}
+	
+	public static JTable getEquipmentTable() {
+		return equipmentTable;
+	}
+	
+	public static JTable getBookingTable() {
+		return bookingTable;
+	}
+	
 	/**
+	 * 
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
@@ -44,6 +65,7 @@ public class Application {
 		});
 	}
 
+	
 	/**
 	 * Create the application.
 	 */
@@ -55,9 +77,46 @@ public class Application {
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
+		GenerateData.generateClients();
+		GenerateData.generateBoo();
+		GenerateData.generateEq();
+		
+		Font font1 = new Font("Tahoma", Font.PLAIN, 18);
+		Font font2 = new Font("Tahoma", Font.PLAIN, 11);
+		UIManager.put("Button.font", font1);
+	//	UIManager.put("ToggleButton.font", /* font of your liking */);
+	//	UIManager.put("RadioButton.font", /* font of your liking */);
+	//	UIManager.put("CheckBox.font", /* font of your liking */);
+	//	UIManager.put("ColorChooser.font", /* font of your liking */);
+	//	UIManager.put("ComboBox.font", /* font of your liking */);
+		UIManager.put("Label.font", font1);
+	//	UIManager.put("List.font", /* font of your liking */);
+	//	UIManager.put("MenuBar.font", /* font of your liking */);
+	//	UIManager.put("MenuItem.font", /* font of your liking */);
+	//	UIManager.put("RadioButtonMenuItem.font", /* font of your liking */);
+	//	UIManager.put("CheckBoxMenuItem.font", /* font of your liking */);
+	//	UIManager.put("Menu.font", /* font of your liking */);
+	//	UIManager.put("PopupMenu.font", /* font of your liking */);
+	//	UIManager.put("OptionPane.font", /* font of your liking */);
+	//	UIManager.put("Panel.font", /* font of your liking */);
+	//	UIManager.put("ProgressBar.font", /* font of your liking */);
+	//	UIManager.put("ScrollPane.font", /* font of your liking */);
+	//	UIManager.put("Viewport.font", /* font of your liking */);
+	//	UIManager.put("TabbedPane.font", /* font of your liking */);
+		UIManager.put("Table.font", font2);
+		UIManager.put("TableHeader.font", font2);
+		UIManager.put("TextField.font", font1);
+		UIManager.put("PasswordField.font", font1);
+	//	UIManager.put("TextArea.font", /* font of your liking */);
+	//	UIManager.put("TextPane.font", /* font of your liking */);
+	//	UIManager.put("EditorPane.font", /* font of your liking */);
+	//	UIManager.put("TitledBorder.font", /* font of your liking */);
+	//	UIManager.put("ToolBar.font", /* font of your liking */);
+	//	UIManager.put("ToolTip.font", /* font of your liking */);
+	//	UIManager.put("Tree.font", /* font of your liking */);
 		frame = new JFrame();
 		frame.setResizable(false);
-		frame.setBounds(100, 100, 450, 300);
+		frame.setBounds(100, 100, 655, 532);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(new CardLayout(0, 0));
 		
@@ -71,19 +130,19 @@ public class Application {
 		menuPanel.setLayout(null);
 		
 		JButton btnClients = new JButton("Baza klient\u00F3w");
-		btnClients.setBounds(105, 68, 125, 23);
+		btnClients.setBounds(321, 110, 174, 63);
 		menuPanel.add(btnClients);
 		
 		JButton btnEquipment = new JButton("Baza sprz\u0119tu");
-		btnEquipment.setBounds(105, 116, 125, 23);
+		btnEquipment.setBounds(94, 242, 174, 63);
 		menuPanel.add(btnEquipment);
 		
 		JButton btnBooking = new JButton("Baza rezerwacji");
-		btnBooking.setBounds(105, 162, 125, 23);
+		btnBooking.setBounds(94, 110, 174, 63);
 		menuPanel.add(btnBooking);
 		
 		JButton btnStatistics = new JButton("Statystyki");
-		btnStatistics.setBounds(265, 68, 102, 23);
+		btnStatistics.setBounds(321, 242, 174, 63);
 		menuPanel.add(btnStatistics);
 		
 		JButton btnMenuLogout = new JButton("Wyloguj");
@@ -93,23 +152,23 @@ public class Application {
 				menuPanel.setVisible(false);
 			}
 		});
-		btnMenuLogout.setBounds(345, 237, 89, 23);
+		btnMenuLogout.setBounds(472, 412, 122, 51);
 		menuPanel.add(btnMenuLogout);
 		menuPanel.setVisible(false);
 
 		
 		passwordField = new JPasswordField();
-		passwordField.setBounds(137, 132, 169, 20);
+		passwordField.setBounds(196, 230, 236, 38);
 		mainPanel.add(passwordField);
 		
 		JLabel lblLogin = new JLabel("Login");
 		lblLogin.setHorizontalAlignment(SwingConstants.CENTER);
-		lblLogin.setBounds(175, 51, 89, 14);
+		lblLogin.setBounds(263, 83, 89, 25);
 		mainPanel.add(lblLogin);
 		
 		JLabel lblPassword = new JLabel("Has\u0142o");
 		lblPassword.setHorizontalAlignment(SwingConstants.CENTER);
-		lblPassword.setBounds(175, 110, 89, 14);
+		lblPassword.setBounds(263, 181, 89, 27);
 		mainPanel.add(lblPassword);
 		
 		JButton btnZaloguj = new JButton("Zaloguj");
@@ -186,13 +245,14 @@ public class Application {
 
 			}
 		});
-		btnZaloguj.setBounds(175, 178, 89, 23);
+		btnZaloguj.setBounds(246, 311, 137, 52);
 		mainPanel.add(btnZaloguj);
 		
 		loginField = new JTextField();
-		loginField.setBounds(137, 79, 169, 20);
+		loginField.setBounds(196, 119, 236, 38);
 		mainPanel.add(loginField);
 		loginField.setColumns(10);
+		
 		
 		JPanel clientsPanel = new JPanel();
 		frame.getContentPane().add(clientsPanel, "name_254040213900164");
@@ -205,7 +265,7 @@ public class Application {
 				clientsPanel.setVisible(false);
 			}
 		});
-		btnClientsLogout.setBounds(345, 237, 89, 23);
+		btnClientsLogout.setBounds(490, 469, 149, 23);
 		clientsPanel.add(btnClientsLogout);
 		
 		JButton btnClientsBack = new JButton("Wr\u00F3\u0107");
@@ -215,20 +275,72 @@ public class Application {
 				menuPanel.setVisible(true);
 			}
 		});
-		btnClientsBack.setBounds(10, 237, 89, 23);
+		btnClientsBack.setBounds(10, 469, 89, 23);
 		clientsPanel.add(btnClientsBack);
 		
 		JLabel lblKlienci = new JLabel("Klienci");
 		lblKlienci.setHorizontalAlignment(SwingConstants.CENTER);
-		lblKlienci.setBounds(200, 11, 46, 14);
+		lblKlienci.setBounds(201, 0, 82, 25);
 		clientsPanel.add(lblKlienci);
 		
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(10, 24, 270, 190);
+		scrollPane.setBounds(10, 24, 529, 434);
 		clientsPanel.add(scrollPane);
+		scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+		scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
 		
-		clientsTable = new JTable();
+		clientsTable = new JTable() {
+			private static final long serialVersionUID = 1L;
+			
+			public boolean isCellEditable(int row, int column) {
+				return false;
+			}
+		};
+		clientsTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		scrollPane.setViewportView(clientsTable);
+		clientsTable.setCellSelectionEnabled(true);
+		clientsTable.setColumnSelectionAllowed(false);
+		
+		JButton btnAddClient = new JButton("Dodaj");
+		btnAddClient.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				AddClientFrame frame2 = new AddClientFrame(frame);
+				frame2.setVisible(true);
+				frame.setEnabled(false);
+			}
+		});
+		btnAddClient.setBounds(550, 36, 89, 45);
+		clientsPanel.add(btnAddClient);
+		
+		JButton btnDeleteClient = new JButton("Usu\u0144");
+		btnDeleteClient.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				String ID = (String) clientsTable.getValueAt(clientsTable.getSelectedRow(), 0);
+				try {
+					GenerateData.deleteRowClients(ID);
+					ArrayList<String> resp = GenerateData.gibClientDataPls();
+					String col[] = {"ID Klienta", "Imie", "Nazwisko", "E-mail", "PESEL", "Nr. telefonu"};
+					DefaultTableModel tableModel = new DefaultTableModel(col, 0);
+					
+					clientsTable.setModel(tableModel);
+					
+					
+					for (int i = 0; i < resp.size(); i++) {
+						String[] data = resp.get(i).split("\t");
+						tableModel.addRow(data);
+					}
+				
+				} catch (Exception e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				
+			}
+		});
+		btnDeleteClient.setBounds(549, 118, 90, 45);
+		clientsPanel.add(btnDeleteClient);
+		
 		
 		JPanel equipmentPanel = new JPanel();
 		equipmentPanel.setLayout(null);
@@ -241,7 +353,7 @@ public class Application {
 				equipmentPanel.setVisible(false);
 			}
 		});
-		btnEquipmentLogout.setBounds(345, 237, 89, 23);
+		btnEquipmentLogout.setBounds(477, 469, 162, 23);
 		equipmentPanel.add(btnEquipmentLogout);
 		
 		JButton btnEquipmentBack = new JButton("Wr\u00F3\u0107");
@@ -251,13 +363,20 @@ public class Application {
 				equipmentPanel.setVisible(false);
 			}
 		});
-		btnEquipmentBack.setBounds(10, 237, 89, 23);
+		btnEquipmentBack.setBounds(10, 469, 89, 23);
 		equipmentPanel.add(btnEquipmentBack);
 		
 		JLabel lblSprzt = new JLabel("Sprz\u0119t");
 		lblSprzt.setHorizontalAlignment(SwingConstants.CENTER);
-		lblSprzt.setBounds(200, 11, 46, 14);
+		lblSprzt.setBounds(200, 0, 96, 25);
 		equipmentPanel.add(lblSprzt);
+		
+		JScrollPane scrollPane_1 = new JScrollPane();
+		scrollPane_1.setBounds(10, 24, 511, 434);
+		equipmentPanel.add(scrollPane_1);
+		
+		equipmentTable = new JTable();
+		scrollPane_1.setViewportView(equipmentTable);
 		
 		JPanel bookingPanel = new JPanel();
 		bookingPanel.setLayout(null);
@@ -270,7 +389,7 @@ public class Application {
 				bookingPanel.setVisible(false);
 			}
 		});
-		btnBookingLogout.setBounds(345, 237, 89, 23);
+		btnBookingLogout.setBounds(478, 469, 161, 23);
 		bookingPanel.add(btnBookingLogout);
 		
 		JButton btnBookingBack = new JButton("Wr\u00F3\u0107");
@@ -280,18 +399,47 @@ public class Application {
 				bookingPanel.setVisible(false);
 			}
 		});
-		btnBookingBack.setBounds(10, 237, 89, 23);
+		btnBookingBack.setBounds(10, 469, 89, 23);
 		bookingPanel.add(btnBookingBack);
 		
 		JLabel lblRezerwacje = new JLabel("Rezerwacje");
 		lblRezerwacje.setHorizontalAlignment(SwingConstants.CENTER);
-		lblRezerwacje.setBounds(186, 11, 79, 14);
+		lblRezerwacje.setBounds(174, 0, 120, 25);
 		bookingPanel.add(lblRezerwacje);
+		
+		JScrollPane scrollPane_2 = new JScrollPane();
+		scrollPane_2.setBounds(10, 24, 510, 434);
+		bookingPanel.add(scrollPane_2);
+		
+		bookingTable = new JTable();
+		scrollPane_2.setViewportView(bookingTable);
 		
 		btnEquipment.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				equipmentPanel.setVisible(true);
-				menuPanel.setVisible(false);
+				menuPanel.setVisible(false);			
+				
+				try {
+					ArrayList<String> resp = GenerateData.gibEqDataPls();
+					String col[] = {"ID Sprzetu", "ID Rezerwacji", "Status", "Kategoria", "Opis"};
+					DefaultTableModel tableModel = new DefaultTableModel(col, 0);
+					
+					equipmentTable.setModel(tableModel);
+					
+					
+					for (int i = 0; i < resp.size(); i++) {
+						String[] data = resp.get(i).split("\t");
+						tableModel.addRow(data);
+					}
+//					for (int i = 0; i < tableModel.getRowCount(); i++) {
+//						for (int j = 0; j < tableModel.getColumnCount(); j++)
+//							System.out.print(tableModel.getValueAt(i, j) + " || ");
+//						System.out.println();
+//					}
+				} catch (Exception e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 			}
 		});
 		
@@ -299,6 +447,30 @@ public class Application {
 			public void actionPerformed(ActionEvent e) {
 				bookingPanel.setVisible(true);
 				menuPanel.setVisible(false);
+				
+				
+				try {
+					ArrayList<String> resp = GenerateData.gibBooDataPls();
+					String col[] = {"ID Rezewacji", "ID Sprzetu" , "Data rezerwacji", "Status", "Data wygasniecia"};
+					DefaultTableModel tableModel = new DefaultTableModel(col, 0);
+					
+					bookingTable.setModel(tableModel);
+					
+					
+					for (int i = 0; i < resp.size(); i++) {
+						String[] data = resp.get(i).split("\t");
+						tableModel.addRow(data);
+					}
+//					for (int i = 0; i < tableModel.getRowCount(); i++) {
+//						for (int j = 0; j < tableModel.getColumnCount(); j++)
+//							System.out.print(tableModel.getValueAt(i, j) + " || ");
+//						System.out.println();
+//					}
+				
+				} catch (Exception e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 			}
 		});
 		
@@ -383,8 +555,28 @@ public class Application {
 		
 		btnClients.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				
 				menuPanel.setVisible(false);
 				clientsPanel.setVisible(true);
+				
+				try {
+					ArrayList<String> resp = GenerateData.gibClientDataPls();
+					String col[] = {"ID Klienta", "Imie", "Nazwisko", "E-mail", "PESEL", "Nr. telefonu"};
+					DefaultTableModel tableModel = new DefaultTableModel(col, 0);
+					
+					clientsTable.setModel(tableModel);
+					
+					
+					for (int i = 0; i < resp.size(); i++) {
+						String[] data = resp.get(i).split("\t");
+						tableModel.addRow(data);
+					}
+				
+				} catch (Exception e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				
 			}
 		});
 
