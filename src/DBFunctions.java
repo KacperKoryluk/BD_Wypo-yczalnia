@@ -226,6 +226,42 @@ public class DBFunctions {
 		
 		return result;
 	}
+	public ArrayList<String> findBookingsByStatus(String status)
+	{
+		ArrayList<String> result = null;
+		try 
+		{
+			result = DBOperations.executeQuery(con, "select * from REZERWACJE where STATUS like '" + status + "'");
+		}
+		catch(SQLException e)
+		{
+			e.printStackTrace();
+		} catch (Exception e) {
+			
+			e.printStackTrace();
+		}
+		
+		return result;
+	}
+	
+	
+	public ArrayList<String> findBookingUsingClientID( String ID)
+	{
+		ArrayList<String> result = null;
+		try 
+		{
+			result = DBOperations.executeQuery(con, "select * from REZERWACJE where (ID_KLIENTA = " + ID + ")");
+		}
+		catch(SQLException e)
+		{
+			e.printStackTrace();
+		} catch (Exception e) {
+			
+			e.printStackTrace();
+		}
+		
+		return result;
+	}
 	
 	/**
 	 * 
@@ -237,7 +273,7 @@ public class DBFunctions {
 		
 		try
 		{
-			result = DBOperations.executeQuery(con, "select eq.NAZWA, count(eq.NAZWA) from SPRZET eq GROUP BY eq.NAZWA ORDER BY eq.NAZWA ASC");
+			result = DBOperations.executeQuery(con, "select eq.KATEGORIA, count(eq.KATEGORIA) from SPRZET eq GROUP BY eq.KATEGORIA ORDER BY eq.KATEGORIA ASC");
 		}
 		catch(Exception e)
 		{
@@ -251,13 +287,29 @@ public class DBFunctions {
 	 * 
 	 * @returns How many items every status has
 	 */
-	public ArrayList<String> groupByStatus()
+	public ArrayList<String> groupEqByStatus()
 	{
 ArrayList<String> result = null;
 		
 		try
 		{
 			result = DBOperations.executeQuery(con, "select eq.STATUS, count(eq.STATUS) from SPRZET eq GROUP BY eq.STATUS ORDER BY eq.STATUS ASC");
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		
+		return result;
+	}
+	
+	public ArrayList<String> groupBookingsByStatus()
+	{
+ArrayList<String> result = null;
+		
+		try
+		{
+			result = DBOperations.executeQuery(con, "select eq.STATUS, count(eq.STATUS) from REZERWACJE eq GROUP BY eq.STATUS ORDER BY eq.STATUS ASC");
 		}
 		catch(Exception e)
 		{
