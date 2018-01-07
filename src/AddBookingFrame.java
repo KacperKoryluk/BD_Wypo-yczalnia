@@ -179,18 +179,17 @@ public class AddBookingFrame extends JFrame {
 		JButton btnAcc = new JButton("Akceptuj");
 		btnAcc.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				int[] rows = booEqTable.getSelectedRows();
+
 				try {
-					if (rows.length != 0) {
-						
-						for (int i = 0; i < rows.length; i++) {
-							Application.functions.updateEquipment(eqTable.getValueAt(rows[i], 0).toString(),
+
+					int rows = booEqTable.getRowCount();	
+						for (int i = 0; i < rows; i++) {
+							Application.functions.updateEquipment(booEqTable.getValueAt(i, 0).toString(),
 																Integer.toString(hash),
 																"NIEDOSTEPNY",
-																eqTable.getValueAt(rows[i], 1).toString(), 
-																eqTable.getValueAt(rows[i], 2).toString());
+																booEqTable.getValueAt(i, 1).toString(), 
+																booEqTable.getValueAt(i, 2).toString());
 						}
-					}
 					
 					
 					ArrayList<String> resp = Application.functions.getBookingsByStatus("OPLACONA");
