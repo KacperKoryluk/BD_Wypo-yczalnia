@@ -98,11 +98,11 @@ public class AddClientFrame extends JFrame {
 					if (surnameField.getText().trim().compareTo("") == 0) { lblSurname.setForeground(Color.RED); correctData = false; }
 					
 					if (correctData) {
-						String ID = Integer.toString(GUIMethods.hashID(peselField.getText(), surnameField.getText(), 99999));
+						String ID = Integer.toString(GUIMethods.hashIDClients(peselField.getText(), surnameField.getText(), 99999));
 						String text = emailField.getText().trim();
 						if (text.compareTo("") == 0)
 							text = null;
-						GenerateData.addRowClient(ID, nameField.getText(), surnameField.getText(), text, peselField.getText(), phoneField.getText());
+						Application.functions.addClient(ID, nameField.getText(), surnameField.getText(), peselField.getText(), text, phoneField.getText());
 						
 						nameField.setText("");
 						surnameField.setText("");
@@ -111,8 +111,8 @@ public class AddClientFrame extends JFrame {
 						phoneField.setText("");
 						
 						try {
-							ArrayList<String> resp = GenerateData.gibClientDataPls();
-							String col[] = {"ID Klienta", "Imie", "Nazwisko", "E-mail", "PESEL", "Nr. telefonu"};
+							ArrayList<String> resp = Application.functions.getTableContent("KLIENCI");
+							String col[] = {"ID Klienta", "Imie", "Nazwisko", "PESEL", "E-mail", "Nr. telefonu"};
 							DefaultTableModel tableModel = new DefaultTableModel(col, 0);
 							
 							Application.getClientsTable().setModel(tableModel);
@@ -152,11 +152,11 @@ public class AddClientFrame extends JFrame {
 					if (surnameField.getText().trim().compareTo("") == 0) { lblSurname.setForeground(Color.RED); correctData = false; }
 					
 					if (correctData) {
-						String ID = Integer.toString(GUIMethods.hashID(peselField.getText(), surnameField.getText(), 99999));
+						String ID = Integer.toString(GUIMethods.hashIDClients(peselField.getText(), surnameField.getText(), 99999));
 						String text = emailField.getText().trim();
 						if (text.compareTo("") == 0)
 							text = null;
-						GenerateData.addRowClient(ID, nameField.getText(), surnameField.getText(), text, peselField.getText(), phoneField.getText());
+						Application.functions.addClient(ID, nameField.getText(), surnameField.getText(), peselField.getText(), text, phoneField.getText());
 						
 						nameField.setText("");
 						surnameField.setText("");
@@ -165,8 +165,8 @@ public class AddClientFrame extends JFrame {
 						phoneField.setText("");
 						
 						try {
-							ArrayList<String> resp = GenerateData.gibClientDataPls();
-							String col[] = {"ID Klienta", "Imie", "Nazwisko", "E-mail", "PESEL", "Nr. telefonu"};
+							ArrayList<String> resp = Application.functions.getTableContent("KLIENCI");
+							String col[] = {"ID Klienta", "Imie", "Nazwisko", "PESEL", "E-mail", "Nr. telefonu"};
 							DefaultTableModel tableModel = new DefaultTableModel(col, 0);
 							
 							Application.getClientsTable().setModel(tableModel);
@@ -207,11 +207,11 @@ public class AddClientFrame extends JFrame {
 					if (surnameField.getText().trim().compareTo("") == 0) { lblSurname.setForeground(Color.RED); correctData = false; }
 					
 					if (correctData) {
-						String ID = Integer.toString(GUIMethods.hashID(peselField.getText(), surnameField.getText(), 99999));
+						String ID = Integer.toString(GUIMethods.hashIDClients(peselField.getText(), surnameField.getText(), 99999));
 						String text = emailField.getText().trim();
 						if (text.compareTo("") == 0)
 							text = null;
-						GenerateData.addRowClient(ID, nameField.getText(), surnameField.getText(), text, peselField.getText(), phoneField.getText());
+						Application.functions.addClient(ID, nameField.getText(), surnameField.getText(), peselField.getText(), text, phoneField.getText());
 						
 						nameField.setText("");
 						surnameField.setText("");
@@ -220,8 +220,8 @@ public class AddClientFrame extends JFrame {
 						phoneField.setText("");
 						
 						try {
-							ArrayList<String> resp = GenerateData.gibClientDataPls();
-							String col[] = {"ID Klienta", "Imie", "Nazwisko", "E-mail", "PESEL", "Nr. telefonu"};
+							ArrayList<String> resp = Application.functions.getTableContent("KLIENCI");
+							String col[] = {"ID Klienta", "Imie", "Nazwisko", "PESEL", "E-mail", "Nr. telefonu"};
 							DefaultTableModel tableModel = new DefaultTableModel(col, 0);
 							
 							Application.getClientsTable().setModel(tableModel);
@@ -261,11 +261,11 @@ public class AddClientFrame extends JFrame {
 					if (surnameField.getText().trim().compareTo("") == 0) { lblSurname.setForeground(Color.RED); correctData = false; }
 					
 					if (correctData) {
-						String ID = Integer.toString(GUIMethods.hashID(peselField.getText(), surnameField.getText(), 99999));
+						String ID = Integer.toString(GUIMethods.hashIDClients(peselField.getText(), surnameField.getText(), 99999));
 						String text = emailField.getText().trim();
 						if (text.compareTo("") == 0)
 							text = null;
-						GenerateData.addRowClient(ID, nameField.getText(), surnameField.getText(), text, peselField.getText(), phoneField.getText());
+						Application.functions.addClient(ID, nameField.getText(), surnameField.getText(), peselField.getText(), text, phoneField.getText());
 						
 						nameField.setText("");
 						surnameField.setText("");
@@ -274,8 +274,8 @@ public class AddClientFrame extends JFrame {
 						phoneField.setText("");
 						
 						try {
-							ArrayList<String> resp = GenerateData.gibClientDataPls();
-							String col[] = {"ID Klienta", "Imie", "Nazwisko", "E-mail", "PESEL", "Nr. telefonu"};
+							ArrayList<String> resp = Application.functions.getTableContent("KLIENCI");
+							String col[] = {"ID Klienta", "Imie", "Nazwisko", "PESEL", "E-mail", "Nr. telefonu"};
 							DefaultTableModel tableModel = new DefaultTableModel(col, 0);
 							
 							Application.getClientsTable().setModel(tableModel);
@@ -315,11 +315,11 @@ public class AddClientFrame extends JFrame {
 					if (surnameField.getText().trim().compareTo("") == 0) { lblSurname.setForeground(Color.RED); correctData = false; }
 					
 					if (correctData) {
-						String ID = Integer.toString(GUIMethods.hashID(peselField.getText(), surnameField.getText(), 99999));
+						String ID = Integer.toString(GUIMethods.hashIDClients(peselField.getText(), surnameField.getText(), 99999));
 						String text = emailField.getText().trim();
 						if (text.compareTo("") == 0)
 							text = null;
-						GenerateData.addRowClient(ID, nameField.getText(), surnameField.getText(), text, peselField.getText(), phoneField.getText());
+						Application.functions.addClient(ID, nameField.getText(), surnameField.getText(), peselField.getText(), text, phoneField.getText());
 						
 						nameField.setText("");
 						surnameField.setText("");
@@ -328,8 +328,8 @@ public class AddClientFrame extends JFrame {
 						phoneField.setText("");
 						
 						try {
-							ArrayList<String> resp = GenerateData.gibClientDataPls();
-							String col[] = {"ID Klienta", "Imie", "Nazwisko", "E-mail", "PESEL", "Nr. telefonu"};
+							ArrayList<String> resp = Application.functions.getTableContent("KLIENCI");
+							String col[] = {"ID Klienta", "Imie", "Nazwisko", "PESEL", "E-mail", "Nr. telefonu"};
 							DefaultTableModel tableModel = new DefaultTableModel(col, 0);
 							
 							Application.getClientsTable().setModel(tableModel);
@@ -369,11 +369,12 @@ public class AddClientFrame extends JFrame {
 				if (surnameField.getText().trim().compareTo("") == 0) { lblSurname.setForeground(Color.RED); correctData = false; }
 				
 				if (correctData) {
-					String ID = Integer.toString(GUIMethods.hashID(peselField.getText(), surnameField.getText(), 99999));
+					String ID = Integer.toString(GUIMethods.hashIDClients(peselField.getText(), surnameField.getText(), 99999));
 					String text = emailField.getText().trim();
 					if (text.compareTo("") == 0)
 						text = null;
-					GenerateData.addRowClient(ID, nameField.getText(), surnameField.getText(), text, peselField.getText(), phoneField.getText());
+					
+					Application.functions.addClient(ID, nameField.getText(), surnameField.getText(), peselField.getText(), text, phoneField.getText());
 					
 					nameField.setText("");
 					surnameField.setText("");
@@ -382,10 +383,10 @@ public class AddClientFrame extends JFrame {
 					phoneField.setText("");
 					
 					try {
-						ArrayList<String> resp = GenerateData.gibClientDataPls();
-						String col[] = {"ID Klienta", "Imie", "Nazwisko", "E-mail", "PESEL", "Nr. telefonu"};
+						ArrayList<String> resp = Application.functions.getTableContent("KLIENCI");
+						String col[] = {"ID Klienta", "Imie", "Nazwisko", "PESEL", "E-mail", "Nr. telefonu"};
 						DefaultTableModel tableModel = new DefaultTableModel(col, 0);
-						
+
 						Application.getClientsTable().setModel(tableModel);
 						
 						

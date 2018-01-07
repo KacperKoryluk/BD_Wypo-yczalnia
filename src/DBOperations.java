@@ -64,6 +64,8 @@ public class DBOperations {
 			
 			outputResult.add(tmp.toString());
 		}
+		resultSet.close();
+		statement.close();
 		
 		return outputResult;
 	}

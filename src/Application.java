@@ -11,6 +11,8 @@ import javax.swing.JPasswordField;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 
 import java.awt.event.ActionListener;
@@ -35,7 +37,16 @@ public class Application {
 	private static JTable clientsTable;
 	private static JTable equipmentTable;
 	private static JTable bookingTable;
+	static public DBFunctions functions = new DBFunctions();
+	private static JTable eqDetailsTable;
+	private static JTable booArchTable;
 
+	public static JTable getBooArchTable() {
+		return booArchTable;
+	}
+	public static JTable getEqDetailsTable() {
+		return eqDetailsTable;
+	}
 	public static JTable getClientsTable() {
 		return clientsTable;
 	}
@@ -316,11 +327,11 @@ public class Application {
 		btnDeleteClient.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
-				String ID = (String) clientsTable.getValueAt(clientsTable.getSelectedRow(), 0);
+				String ID = clientsTable.getValueAt(clientsTable.getSelectedRow(), 0).toString();
 				try {
-					GenerateData.deleteRowClients(ID);
-					ArrayList<String> resp = GenerateData.gibClientDataPls();
-					String col[] = {"ID Klienta", "Imie", "Nazwisko", "E-mail", "PESEL", "Nr. telefonu"};
+					functions.deleteClient(ID);
+					ArrayList<String> resp = functions.getTableContent("KLIENCI");
+					String col[] = {"ID Klienta", "Imie", "Nazwisko", "PESEL", "E-mail", "Nr. telefonu"};
 					DefaultTableModel tableModel = new DefaultTableModel(col, 0);
 					
 					clientsTable.setModel(tableModel);
@@ -345,6 +356,12 @@ public class Application {
 		btnUpdate.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				UpdateClientFrame frame2 = new UpdateClientFrame(frame);
+				int row = clientsTable.getSelectedRow();
+				frame2.getNameField().setText(clientsTable.getValueAt(row, 1).toString());
+				frame2.getSurnameField().setText(clientsTable.getValueAt(row, 2).toString());
+				frame2.getEmailField().setText(clientsTable.getValueAt(row, 4).toString());
+				frame2.getPeselField().setText(clientsTable.getValueAt(row, 3).toString());
+				frame2.getPhoneField().setText(clientsTable.getValueAt(row, 5).toString());
 				frame2.setVisible(true);
 				frame.setEnabled(false);
 			}
@@ -364,7 +381,7 @@ public class Application {
 				equipmentPanel.setVisible(false);
 			}
 		});
-		btnEquipmentLogout.setBounds(477, 469, 162, 23);
+		btnEquipmentLogout.setBounds(477, 458, 162, 34);
 		equipmentPanel.add(btnEquipmentLogout);
 		
 		JButton btnEquipmentBack = new JButton("Wr\u00F3\u0107");
@@ -374,20 +391,150 @@ public class Application {
 				equipmentPanel.setVisible(false);
 			}
 		});
-		btnEquipmentBack.setBounds(10, 469, 89, 23);
+		btnEquipmentBack.setBounds(10, 458, 89, 34);
 		equipmentPanel.add(btnEquipmentBack);
 		
 		JLabel lblSprzt = new JLabel("Sprz\u0119t");
 		lblSprzt.setHorizontalAlignment(SwingConstants.CENTER);
-		lblSprzt.setBounds(200, 0, 96, 25);
+		lblSprzt.setBounds(252, 0, 96, 25);
 		equipmentPanel.add(lblSprzt);
 		
 		JScrollPane scrollPane_1 = new JScrollPane();
-		scrollPane_1.setBounds(10, 24, 511, 434);
+		scrollPane_1.setBounds(10, 24, 244, 367);
 		equipmentPanel.add(scrollPane_1);
+		scrollPane_1.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+		scrollPane_1.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
 		
-		equipmentTable = new JTable();
-		scrollPane_1.setViewportView(equipmentTable);
+		equipmentTable = new JTable() {
+			private static final long serialVersionUID = 1L;
+			
+			public boolean isCellEditable(int row, int column) {
+				return false;
+			}
+		};
+		equipmentTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		equipmentTable.setCellSelectionEnabled(true);
+		scrollPane_1.setViewportView(equipmentTable);		
+		
+		equipmentTable.getSelectionModel().addListSelectionListener(new ListSelectionListener(){
+	        public void valueChanged(ListSelectionEvent event) {
+	            
+	        	int row = equipmentTable.getSelectedRow();
+				if (row != -1) {
+					try {
+						ArrayList<String> resp = functions.getEqByCategory(equipmentTable.getValueAt(row, 0).toString());
+						
+						String col[] = {"ID_SPRZETU", "ID_REZERWACJI", "STATUS", "KATEGORIA", "OPIS_SPRZETU"};
+						DefaultTableModel tableModel = new DefaultTableModel(col, 0);
+						
+						eqDetailsTable.setModel(tableModel);
+						
+						
+						for (int i = 0; i < resp.size(); i++) {
+							String[] data = resp.get(i).split("\t");
+							tableModel.addRow(data);
+						}
+					
+					} catch (Exception e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+				}
+	        }
+	    });
+		
+		JButton btnAddEq = new JButton("Dodaj");
+		btnAddEq.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				AddEqFrame frame2 = new AddEqFrame(frame);
+				frame2.setVisible(true);
+				frame.setEnabled(false);
+			}
+		});
+		btnAddEq.setBounds(75, 402, 89, 37);
+		equipmentPanel.add(btnAddEq);
+		
+		eqDetailsTable = new JTable() {
+			private static final long serialVersionUID = 1L;
+			
+			public boolean isCellEditable(int row, int column) {
+				return false;
+			}
+		};
+		eqDetailsTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		
+		JButton btnDeleteEq = new JButton("Usu\u0144");
+		btnDeleteEq.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				
+				String ID = eqDetailsTable.getValueAt(eqDetailsTable.getSelectedRow(), 0).toString();
+				String category = eqDetailsTable.getValueAt(eqDetailsTable.getSelectedRow(), 3).toString();
+				functions.deleteEquipment(ID);
+				try {
+					ArrayList<String> resp = functions.getEqByCategory();
+					String col[] = {"Kategoria", "Iloœæ"};
+					DefaultTableModel tableModel = new DefaultTableModel(col, 0);
+					
+					equipmentTable.setModel(tableModel);
+					
+					
+					for (int i = 0; i < resp.size(); i++) {
+						String[] data = resp.get(i).split("\t");
+						tableModel.addRow(data);
+					}
+				} catch (Exception e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				
+				try {
+					ArrayList<String> resp = functions.getEqByCategory(category);
+					
+					String col[] = {"ID_SPRZETU", "ID_REZERWACJI", "STATUS", "KATEGORIA", "OPIS_SPRZETU"};
+					DefaultTableModel tableModel = new DefaultTableModel(col, 0);
+					
+					eqDetailsTable.setModel(tableModel);
+					
+					
+					for (int i = 0; i < resp.size(); i++) {
+						String[] data = resp.get(i).split("\t");
+						tableModel.addRow(data);
+					}
+				
+				} catch (Exception e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				
+			}
+		});
+		btnDeleteEq.setBounds(346, 402, 89, 37);
+		equipmentPanel.add(btnDeleteEq);
+		
+		JButton btnUpdateEq = new JButton("Aktualizuj");
+		btnUpdateEq.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				UpdateEqFrame frame2 = new UpdateEqFrame(frame);
+				int row = eqDetailsTable.getSelectedRow();
+				frame2.getCatField().setText(eqDetailsTable.getValueAt(row, 3).toString());
+				frame2.getDescField().setText(eqDetailsTable.getValueAt(row, 4).toString());
+				frame2.setVisible(true);
+				frame.setEnabled(false);
+			}
+		});
+		btnUpdateEq.setBounds(463, 402, 145, 37);
+		equipmentPanel.add(btnUpdateEq);
+		
+		JScrollPane scrollPane_3 = new JScrollPane();
+		scrollPane_3.setBounds(346, 24, 262, 367);
+		equipmentPanel.add(scrollPane_3);
+		scrollPane_3.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+		scrollPane_3.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
+		
+		
+		eqDetailsTable.setCellSelectionEnabled(true);
+		scrollPane_3.setViewportView(eqDetailsTable);
 		
 		JPanel bookingPanel = new JPanel();
 		bookingPanel.setLayout(null);
@@ -400,7 +547,7 @@ public class Application {
 				bookingPanel.setVisible(false);
 			}
 		});
-		btnBookingLogout.setBounds(478, 469, 161, 23);
+		btnBookingLogout.setBounds(477, 459, 162, 33);
 		bookingPanel.add(btnBookingLogout);
 		
 		JButton btnBookingBack = new JButton("Wr\u00F3\u0107");
@@ -410,7 +557,7 @@ public class Application {
 				bookingPanel.setVisible(false);
 			}
 		});
-		btnBookingBack.setBounds(10, 469, 89, 23);
+		btnBookingBack.setBounds(10, 459, 89, 33);
 		bookingPanel.add(btnBookingBack);
 		
 		JLabel lblRezerwacje = new JLabel("Rezerwacje");
@@ -419,27 +566,193 @@ public class Application {
 		bookingPanel.add(lblRezerwacje);
 		
 		JScrollPane scrollPane_2 = new JScrollPane();
-		scrollPane_2.setBounds(10, 24, 629, 369);
+		scrollPane_2.setBounds(10, 24, 307, 379);
 		bookingPanel.add(scrollPane_2);
+		scrollPane_2.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+		scrollPane_2.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
 		
-		bookingTable = new JTable();
+		bookingTable = new JTable() {
+			private static final long serialVersionUID = 1L;
+			
+			public boolean isCellEditable(int row, int column) {
+				return false;
+			}
+		};
+		bookingTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		bookingTable.setCellSelectionEnabled(true);
 		scrollPane_2.setViewportView(bookingTable);
 		
-		JButton btnAdd = new JButton("Dodaj");
-		btnAdd.setBounds(79, 414, 110, 44);
-		bookingPanel.add(btnAdd);
+		JButton btnAddBoo = new JButton("Dodaj");
+		btnAddBoo.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				AddBookingFrame frame2 = new AddBookingFrame(frame);
+				String col[] = {"ID", "Kategoria", "Opis"};
+				DefaultTableModel tableModel = new DefaultTableModel(col, 0);
+				
+				frame2.setHash(System.currentTimeMillis(), 99999);
+				
+				ArrayList<String> resp = functions.getEqByOrderNull();
+				JTable eqTable = frame2.getEqTable();
+				eqTable.setModel(tableModel);
+				
+				for (int i = 0; i < resp.size(); i++) {
+					String[] data = resp.get(i).split("\t");
+					tableModel.addRow(data);
+				}
+				
+				
+					 resp = functions.getTableContent("KLIENCI");
+					
+					String col2[] = {"ID Klienta", "Imie", "Nazwisko", "PESEL", "E-mail", "Nr. telefonu"};
+					DefaultTableModel tableModel2 = new DefaultTableModel(col2, 0);
+					
+					frame2.getClientTable().setModel(tableModel2);
+					
+					
+					for (int i = 0; i < resp.size(); i++) {
+						String[] data = resp.get(i).split("\t");
+						tableModel2.addRow(data);
+					}
+
+
+				frame2.setVisible(true);
+				frame.setEnabled(false);
+				
+			}
+		});
+		btnAddBoo.setBounds(350, 415, 108, 33);
+		bookingPanel.add(btnAddBoo);
 		
 		JButton btnPay = new JButton("Op\u0142a\u0107");
 		btnPay.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				int row = bookingTable.getSelectedRow();
+
+				
+				functions.updateBooking(bookingTable.getValueAt(row, 0).toString(),
+										bookingTable.getValueAt(row, 1).toString(),
+										bookingTable.getValueAt(row, 2).toString().split("\\.")[0],
+										"OPLACONA",
+										bookingTable.getValueAt(row, 4).toString().split("\\.")[0]);
+				
+				try {
+					ArrayList<String> resp = functions.getBookingsByStatus("OPLACONA");
+					ArrayList<String> resp2 = functions.getBookingsByStatus("NIEOPLACONA");
+					String col[] = {"ID Rezewacji", "ID Klienta" , "Data rezerwacji", "Status", "Data wygasniecia"};
+					DefaultTableModel tableModel = new DefaultTableModel(col, 0);
+					
+					bookingTable.setModel(tableModel);
+					
+					
+					for (int i = 0; i < resp.size(); i++) {
+						String[] data = resp.get(i).split("\t");
+						tableModel.addRow(data);
+					}
+					for (int i = 0; i < resp2.size(); i++) {
+						String[] data = resp2.get(i).split("\t");
+						tableModel.addRow(data);
+					}
+				} catch (Exception e1) {
+					e1.printStackTrace();
+				}
 			}
 		});
-		btnPay.setBounds(271, 414, 104, 44);
+		btnPay.setBounds(20, 415, 101, 33);
 		bookingPanel.add(btnPay);
 		
 		JButton btnArchive = new JButton("Archiwizuj");
-		btnArchive.setBounds(438, 414, 110, 44);
+		btnArchive.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				int row = bookingTable.getSelectedRow();
+
+				
+				functions.updateBooking(bookingTable.getValueAt(row, 0).toString(),
+										bookingTable.getValueAt(row, 1).toString(),
+										bookingTable.getValueAt(row, 2).toString().split("\\.")[0],
+										"ARCHIWUM",
+										bookingTable.getValueAt(row, 4).toString().split("\\.")[0]);
+				
+				functions.freeEquipment(bookingTable.getValueAt(row, 0).toString());
+				
+				
+				try {
+					ArrayList<String> resp = functions.getBookingsByStatus("OPLACONA");
+					ArrayList<String> resp2 = functions.getBookingsByStatus("NIEOPLACONA");
+					String col[] = {"ID Rezewacji", "ID Klienta" , "Data rezerwacji", "Status", "Data wygasniecia"};
+					DefaultTableModel tableModel = new DefaultTableModel(col, 0);
+					
+					bookingTable.setModel(tableModel);
+					
+					
+					for (int i = 0; i < resp.size(); i++) {
+						String[] data = resp.get(i).split("\t");
+						tableModel.addRow(data);
+					}
+					for (int i = 0; i < resp2.size(); i++) {
+						String[] data = resp2.get(i).split("\t");
+						tableModel.addRow(data);
+					}
+					
+					
+					resp = functions.getBookingsByStatus("ARCHIWUM");
+					
+					DefaultTableModel tableModel2 = new DefaultTableModel(col, 0);
+					
+					booArchTable.setModel(tableModel2);
+					
+					
+					for (int i = 0; i < resp.size(); i++) {
+						String[] data = resp.get(i).split("\t");
+						tableModel2.addRow(data);
+					}
+				} catch (Exception e1) {
+					e1.printStackTrace();
+				}
+			}
+		});
+		btnArchive.setBounds(131, 415, 162, 33);
 		bookingPanel.add(btnArchive);
+		
+		JScrollPane scrollPane_4 = new JScrollPane();
+		scrollPane_4.setBounds(327, 24, 312, 379);
+		bookingPanel.add(scrollPane_4);
+		scrollPane_4.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+		scrollPane_4.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
+		
+		booArchTable = new JTable() {
+			private static final long serialVersionUID = 1L;
+			
+			public boolean isCellEditable(int row, int column) {
+				return false;
+			}
+		};
+		booArchTable.setCellSelectionEnabled(true);
+		booArchTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		scrollPane_4.setViewportView(booArchTable);
+		
+		JButton btnDeleteBoo = new JButton("Usu\u0144");
+		btnDeleteBoo.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				int row = booArchTable.getSelectedRow();
+				
+				functions.deleteBooking(booArchTable.getValueAt(row, 0).toString());
+				
+				ArrayList<String> resp = functions.getBookingsByStatus("ARCHIWUM");
+				String col[] = {"ID Rezewacji", "ID Klienta" , "Data rezerwacji", "Status", "Data wygasniecia"};
+				DefaultTableModel tableModel = new DefaultTableModel(col, 0);
+				
+				booArchTable.setModel(tableModel);
+				
+				
+				for (int i = 0; i < resp.size(); i++) {
+					String[] data = resp.get(i).split("\t");
+					tableModel.addRow(data);
+				}
+				
+			}
+		});
+		btnDeleteBoo.setBounds(488, 415, 101, 33);
+		bookingPanel.add(btnDeleteBoo);
 		
 		btnEquipment.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -447,8 +760,8 @@ public class Application {
 				menuPanel.setVisible(false);			
 				
 				try {
-					ArrayList<String> resp = GenerateData.gibEqDataPls();
-					String col[] = {"ID Sprzetu", "ID Rezerwacji", "Status", "Kategoria", "Opis"};
+					ArrayList<String> resp = functions.getEqByCategory();
+					String col[] = {"Kategoria", "Iloœæ"};
 					DefaultTableModel tableModel = new DefaultTableModel(col, 0);
 					
 					equipmentTable.setModel(tableModel);
@@ -472,11 +785,32 @@ public class Application {
 				
 				
 				try {
-					ArrayList<String> resp = GenerateData.gibBooDataPls();
-					String col[] = {"ID Rezewacji", "ID Sprzetu" , "Data rezerwacji", "Status", "Data wygasniecia"};
+					ArrayList<String> resp = functions.getBookingsByStatus("OPLACONA");
+					ArrayList<String> resp2 = functions.getBookingsByStatus("NIEOPLACONA");
+					String col[] = {"ID Rezewacji", "ID Klienta" , "Data rezerwacji", "Status", "Data wygasniecia"};
 					DefaultTableModel tableModel = new DefaultTableModel(col, 0);
 					
 					bookingTable.setModel(tableModel);
+					
+					
+					for (int i = 0; i < resp.size(); i++) {
+						String[] data = resp.get(i).split("\t");
+						tableModel.addRow(data);
+					}
+					for (int i = 0; i < resp2.size(); i++) {
+						String[] data = resp2.get(i).split("\t");
+						tableModel.addRow(data);
+					}
+				} catch (Exception e1) {
+					e1.printStackTrace();
+				}
+				
+				try {
+					ArrayList<String> resp = functions.getBookingsByStatus("ARCHIWUM");
+					String col[] = {"ID Rezewacji", "ID Klienta" , "Data rezerwacji", "Status", "Data wygasniecia"};
+					DefaultTableModel tableModel = new DefaultTableModel(col, 0);
+					
+					booArchTable.setModel(tableModel);
 					
 					
 					for (int i = 0; i < resp.size(); i++) {
@@ -568,8 +902,9 @@ public class Application {
 				clientsPanel.setVisible(true);
 				
 				try {
-					ArrayList<String> resp = GenerateData.gibClientDataPls();
-					String col[] = {"ID Klienta", "Imie", "Nazwisko", "E-mail", "PESEL", "Nr. telefonu"};
+					ArrayList<String> resp = functions.getTableContent("KLIENCI");
+					
+					String col[] = {"ID Klienta", "Imie", "Nazwisko", "PESEL", "E-mail", "Nr. telefonu"};
 					DefaultTableModel tableModel = new DefaultTableModel(col, 0);
 					
 					clientsTable.setModel(tableModel);

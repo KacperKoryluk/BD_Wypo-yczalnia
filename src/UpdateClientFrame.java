@@ -23,11 +23,27 @@ public class UpdateClientFrame extends JFrame {
 	 */
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
-	private JTextField nameField;
-	private JTextField surnameField;
-	private JTextField emailField;
-	private JTextField phoneField;
+	private static JTextField nameField;
+	private static JTextField surnameField;
+	private static JTextField emailField;
+	private static JTextField phoneField;
+	private static JTextField peselField;
 
+	public JTextField getNameField() {
+		return nameField;
+	}
+	public JTextField getSurnameField() {
+		return surnameField;
+	}
+	public JTextField getEmailField() {
+		return emailField;
+	}
+	public JTextField getPhoneField() {
+		return phoneField;
+	}
+	public JTextField getPeselField() {
+		return peselField;
+	}
 	/**
 	 * Create the frame.
 	 */
@@ -71,7 +87,7 @@ public class UpdateClientFrame extends JFrame {
 		lblPhone.setBounds(252, 140, 149, 23);
 		contentPane.add(lblPhone);
 		
-		JTextField peselField = new JTextField();
+		peselField = new JTextField();
 		peselField.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyReleased(KeyEvent e) {
@@ -91,12 +107,12 @@ public class UpdateClientFrame extends JFrame {
 					
 					if (correctData) {
 							GenerateData.updateClient(Application.getClientsTable().getValueAt(row, 0).toString(), nameField.getText(),
-														surnameField.getText(), emailField.getText(), peselField.getText(), phoneField.getText());
+														surnameField.getText(), peselField.getText(), emailField.getText(), phoneField.getText());
 							
 							
 							try {
 								ArrayList<String> resp = GenerateData.gibClientDataPls();
-								String col[] = {"ID Klienta", "Imie", "Nazwisko", "E-mail", "PESEL", "Nr. telefonu"};
+								String col[] = {"ID Klienta", "Imie", "Nazwisko", "PESEL", "E-mail", "Nr. telefonu"};
 								DefaultTableModel tableModel = new DefaultTableModel(col, 0);
 								
 								Application.getClientsTable().setModel(tableModel);
@@ -142,12 +158,12 @@ public class UpdateClientFrame extends JFrame {
 					
 					if (correctData) {
 							GenerateData.updateClient(Application.getClientsTable().getValueAt(row, 0).toString(), nameField.getText(),
-														surnameField.getText(), emailField.getText(), peselField.getText(), phoneField.getText());
+														surnameField.getText(), peselField.getText(), emailField.getText(), phoneField.getText());
 							
 							
 							try {
 								ArrayList<String> resp = GenerateData.gibClientDataPls();
-								String col[] = {"ID Klienta", "Imie", "Nazwisko", "E-mail", "PESEL", "Nr. telefonu"};
+								String col[] = {"ID Klienta", "Imie", "Nazwisko", "PESEL", "E-mail", "Nr. telefonu"};
 								DefaultTableModel tableModel = new DefaultTableModel(col, 0);
 								
 								Application.getClientsTable().setModel(tableModel);
@@ -193,12 +209,12 @@ public class UpdateClientFrame extends JFrame {
 					
 					if (correctData) {
 							GenerateData.updateClient(Application.getClientsTable().getValueAt(row, 0).toString(), nameField.getText(),
-														surnameField.getText(), emailField.getText(), peselField.getText(), phoneField.getText());
+														surnameField.getText(), peselField.getText(), emailField.getText(), phoneField.getText());
 							
 							
 							try {
 								ArrayList<String> resp = GenerateData.gibClientDataPls();
-								String col[] = {"ID Klienta", "Imie", "Nazwisko", "E-mail", "PESEL", "Nr. telefonu"};
+								String col[] = {"ID Klienta", "Imie", "Nazwisko", "PESEL", "E-mail", "Nr. telefonu"};
 								DefaultTableModel tableModel = new DefaultTableModel(col, 0);
 								
 								Application.getClientsTable().setModel(tableModel);
@@ -244,12 +260,12 @@ public class UpdateClientFrame extends JFrame {
 					
 					if (correctData) {
 							GenerateData.updateClient(Application.getClientsTable().getValueAt(row, 0).toString(), nameField.getText(),
-														surnameField.getText(), emailField.getText(), peselField.getText(), phoneField.getText());
+														surnameField.getText(), peselField.getText(), emailField.getText(), phoneField.getText());
 							
 							
 							try {
 								ArrayList<String> resp = GenerateData.gibClientDataPls();
-								String col[] = {"ID Klienta", "Imie", "Nazwisko", "E-mail", "PESEL", "Nr. telefonu"};
+								String col[] = {"ID Klienta", "Imie", "Nazwisko", "PESEL", "E-mail", "Nr. telefonu"};
 								DefaultTableModel tableModel = new DefaultTableModel(col, 0);
 								
 								Application.getClientsTable().setModel(tableModel);
@@ -295,12 +311,12 @@ public class UpdateClientFrame extends JFrame {
 					
 					if (correctData) {
 							GenerateData.updateClient(Application.getClientsTable().getValueAt(row, 0).toString(), nameField.getText(),
-														surnameField.getText(), emailField.getText(), peselField.getText(), phoneField.getText());
+														surnameField.getText(), peselField.getText(), emailField.getText(), phoneField.getText());
 							
 							
 							try {
 								ArrayList<String> resp = GenerateData.gibClientDataPls();
-								String col[] = {"ID Klienta", "Imie", "Nazwisko", "E-mail", "PESEL", "Nr. telefonu"};
+								String col[] = {"ID Klienta", "Imie", "Nazwisko", "PESEL", "E-mail", "Nr. telefonu"};
 								DefaultTableModel tableModel = new DefaultTableModel(col, 0);
 								
 								Application.getClientsTable().setModel(tableModel);
@@ -330,6 +346,7 @@ public class UpdateClientFrame extends JFrame {
 		btnBack.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				frame.setEnabled(true);
+				setVisible(false);
 				dispose();
 			}
 		});
@@ -353,13 +370,13 @@ public class UpdateClientFrame extends JFrame {
 				if (surnameField.getText().trim().compareTo("") == 0) { lblSurname.setForeground(Color.RED); correctData = false; }
 				
 				if (correctData) {
-						GenerateData.updateClient(Application.getClientsTable().getValueAt(row, 0).toString(), nameField.getText(),
-													surnameField.getText(), emailField.getText(), peselField.getText(), phoneField.getText());
+						Application.functions.updateClient(Application.getClientsTable().getValueAt(row, 0).toString(), nameField.getText(),
+													surnameField.getText(), peselField.getText(), emailField.getText(), phoneField.getText());
 						
 						
 						try {
-							ArrayList<String> resp = GenerateData.gibClientDataPls();
-							String col[] = {"ID Klienta", "Imie", "Nazwisko", "E-mail", "PESEL", "Nr. telefonu"};
+							ArrayList<String> resp = Application.functions.getTableContent("KLIENCI");
+							String col[] = {"ID Klienta", "Imie", "Nazwisko", "PESEL", "E-mail", "Nr. telefonu"};
 							DefaultTableModel tableModel = new DefaultTableModel(col, 0);
 							
 							Application.getClientsTable().setModel(tableModel);
@@ -375,9 +392,11 @@ public class UpdateClientFrame extends JFrame {
 							e1.printStackTrace();
 						}
 						
-						frame.setEnabled(true);
-						dispose();
+
 				}
+				
+				frame.setEnabled(true);
+				dispose();
 			}
 		});
 		btnUpdate.setBounds(344, 281, 132, 29);
