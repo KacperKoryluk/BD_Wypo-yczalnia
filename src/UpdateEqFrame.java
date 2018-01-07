@@ -10,6 +10,7 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
 import javax.swing.JTextField;
 import javax.swing.JButton;
@@ -37,6 +38,7 @@ public class UpdateEqFrame extends JFrame {
 	 * Create the frame.
 	 */
 	public UpdateEqFrame(JFrame frame) {
+		setResizable(false);
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		addWindowListener(new WindowAdapter()
 		{
@@ -121,15 +123,10 @@ public class UpdateEqFrame extends JFrame {
 						String[] data = resp.get(i).split("\t");
 						tableModel.addRow(data);
 					}
-				} catch (Exception e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-				try {
-					ArrayList<String> resp = Application.functions.getEqByCategory(catField.getText().trim());
+					resp = Application.functions.getEqByCategory(catField.getText().trim());
 					
-					String col[] = {"ID_SPRZETU", "ID_REZERWACJI", "STATUS", "KATEGORIA", "OPIS_SPRZETU"};
-					DefaultTableModel tableModel = new DefaultTableModel(col, 0);
+					String col1[] = {"ID_SPRZETU", "ID_REZERWACJI", "STATUS", "KATEGORIA", "OPIS_SPRZETU"};
+					tableModel = new DefaultTableModel(col1, 0);
 					
 					Application.getEqDetailsTable().setModel(tableModel);
 					
@@ -138,14 +135,15 @@ public class UpdateEqFrame extends JFrame {
 						String[] data = resp.get(i).split("\t");
 						tableModel.addRow(data);
 					}
-				
+					
+					frame.setEnabled(true);
+					dispose();
+					
 				} catch (Exception e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
+					JOptionPane.showMessageDialog(null, "Wyst¹pi³ b³¹d, operacja nie powiod³a siê!");
 				}
 				
-				frame.setEnabled(true);
-				dispose();
+
 			}
 
 				

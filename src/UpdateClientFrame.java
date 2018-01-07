@@ -7,6 +7,7 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.JButton;
 import javax.swing.JTextField;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
@@ -48,6 +49,7 @@ public class UpdateClientFrame extends JFrame {
 	 * Create the frame.
 	 */
 	public UpdateClientFrame(JFrame frame) {
+		setResizable(false);
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		addWindowListener(new WindowAdapter()
 		{
@@ -104,32 +106,32 @@ public class UpdateClientFrame extends JFrame {
 					if (peselField.getText().trim().compareTo("") == 0) { lblPesel.setForeground(Color.RED); correctData = false; }
 					if (phoneField.getText().trim().compareTo("") == 0) { lblPhone.setForeground(Color.RED); correctData = false; }
 					if (surnameField.getText().trim().compareTo("") == 0) { lblSurname.setForeground(Color.RED); correctData = false; }
-					
-					if (correctData) {
-							GenerateData.updateClient(Application.getClientsTable().getValueAt(row, 0).toString(), nameField.getText(),
-														surnameField.getText(), peselField.getText(), emailField.getText(), phoneField.getText());
-							
-							
-							try {
-								ArrayList<String> resp = GenerateData.gibClientDataPls();
-								String col[] = {"ID Klienta", "Imie", "Nazwisko", "PESEL", "E-mail", "Nr. telefonu"};
-								DefaultTableModel tableModel = new DefaultTableModel(col, 0);
-								
-								Application.getClientsTable().setModel(tableModel);
+					try {
+						if (correctData) {
+							Application.functions.updateClient(Application.getClientsTable().getValueAt(row, 0).toString(), nameField.getText(),
+									surnameField.getText(), peselField.getText(), emailField.getText(), phoneField.getText());
 								
 								
-								for (int i = 0; i < resp.size(); i++) {
-									String[] data = resp.get(i).split("\t");
-									tableModel.addRow(data);
-								}
-							
-							} catch (Exception e1) {
-								// TODO Auto-generated catch block
-								e1.printStackTrace();
-							}
-							
-							frame.setEnabled(true);
-							dispose();
+	
+									ArrayList<String> resp =Application.functions.getTableContent("KLIENCI");
+									String col[] = {"ID Klienta", "Imie", "Nazwisko", "PESEL", "E-mail", "Nr. telefonu"};
+									DefaultTableModel tableModel = new DefaultTableModel(col, 0);
+									
+									Application.getClientsTable().setModel(tableModel);
+									
+									
+									for (int i = 0; i < resp.size(); i++) {
+										String[] data = resp.get(i).split("\t");
+										tableModel.addRow(data);
+									}
+								
+	
+								
+								frame.setEnabled(true);
+								dispose();
+						}
+					}catch (Exception e1) {
+						JOptionPane.showMessageDialog(null, "Wyst¹pi³ b³¹d, operacja nie powiod³a siê!");
 					}
 				}
 			}
@@ -155,32 +157,32 @@ public class UpdateClientFrame extends JFrame {
 					if (peselField.getText().trim().compareTo("") == 0) { lblPesel.setForeground(Color.RED); correctData = false; }
 					if (phoneField.getText().trim().compareTo("") == 0) { lblPhone.setForeground(Color.RED); correctData = false; }
 					if (surnameField.getText().trim().compareTo("") == 0) { lblSurname.setForeground(Color.RED); correctData = false; }
-					
-					if (correctData) {
-							GenerateData.updateClient(Application.getClientsTable().getValueAt(row, 0).toString(), nameField.getText(),
-														surnameField.getText(), peselField.getText(), emailField.getText(), phoneField.getText());
-							
-							
-							try {
-								ArrayList<String> resp = GenerateData.gibClientDataPls();
-								String col[] = {"ID Klienta", "Imie", "Nazwisko", "PESEL", "E-mail", "Nr. telefonu"};
-								DefaultTableModel tableModel = new DefaultTableModel(col, 0);
-								
-								Application.getClientsTable().setModel(tableModel);
+					try {
+						if (correctData) {
+							Application.functions.updateClient(Application.getClientsTable().getValueAt(row, 0).toString(), nameField.getText(),
+									surnameField.getText(), peselField.getText(), emailField.getText(), phoneField.getText());
 								
 								
-								for (int i = 0; i < resp.size(); i++) {
-									String[] data = resp.get(i).split("\t");
-									tableModel.addRow(data);
-								}
-							
-							} catch (Exception e1) {
-								// TODO Auto-generated catch block
-								e1.printStackTrace();
-							}
-							
-							frame.setEnabled(true);
-							dispose();
+	
+							ArrayList<String> resp =Application.functions.getTableContent("KLIENCI");
+									String col[] = {"ID Klienta", "Imie", "Nazwisko", "PESEL", "E-mail", "Nr. telefonu"};
+									DefaultTableModel tableModel = new DefaultTableModel(col, 0);
+									
+									Application.getClientsTable().setModel(tableModel);
+									
+									
+									for (int i = 0; i < resp.size(); i++) {
+										String[] data = resp.get(i).split("\t");
+										tableModel.addRow(data);
+									}
+								
+	
+								
+								frame.setEnabled(true);
+								dispose();
+						}
+					}catch (Exception e1) {
+						JOptionPane.showMessageDialog(null, "Wyst¹pi³ b³¹d, operacja nie powiod³a siê!");
 					}
 				}
 			}
@@ -206,32 +208,32 @@ public class UpdateClientFrame extends JFrame {
 					if (peselField.getText().trim().compareTo("") == 0) { lblPesel.setForeground(Color.RED); correctData = false; }
 					if (phoneField.getText().trim().compareTo("") == 0) { lblPhone.setForeground(Color.RED); correctData = false; }
 					if (surnameField.getText().trim().compareTo("") == 0) { lblSurname.setForeground(Color.RED); correctData = false; }
-					
-					if (correctData) {
-							GenerateData.updateClient(Application.getClientsTable().getValueAt(row, 0).toString(), nameField.getText(),
-														surnameField.getText(), peselField.getText(), emailField.getText(), phoneField.getText());
-							
-							
-							try {
-								ArrayList<String> resp = GenerateData.gibClientDataPls();
-								String col[] = {"ID Klienta", "Imie", "Nazwisko", "PESEL", "E-mail", "Nr. telefonu"};
-								DefaultTableModel tableModel = new DefaultTableModel(col, 0);
-								
-								Application.getClientsTable().setModel(tableModel);
+					try {
+						if (correctData) {
+							Application.functions.updateClient(Application.getClientsTable().getValueAt(row, 0).toString(), nameField.getText(),
+									surnameField.getText(), peselField.getText(), emailField.getText(), phoneField.getText());
 								
 								
-								for (int i = 0; i < resp.size(); i++) {
-									String[] data = resp.get(i).split("\t");
-									tableModel.addRow(data);
-								}
-							
-							} catch (Exception e1) {
-								// TODO Auto-generated catch block
-								e1.printStackTrace();
-							}
-							
-							frame.setEnabled(true);
-							dispose();
+	
+							ArrayList<String> resp =Application.functions.getTableContent("KLIENCI");
+									String col[] = {"ID Klienta", "Imie", "Nazwisko", "PESEL", "E-mail", "Nr. telefonu"};
+									DefaultTableModel tableModel = new DefaultTableModel(col, 0);
+									
+									Application.getClientsTable().setModel(tableModel);
+									
+									
+									for (int i = 0; i < resp.size(); i++) {
+										String[] data = resp.get(i).split("\t");
+										tableModel.addRow(data);
+									}
+								
+	
+								
+								frame.setEnabled(true);
+								dispose();
+						}
+					}catch (Exception e1) {
+						JOptionPane.showMessageDialog(null, "Wyst¹pi³ b³¹d, operacja nie powiod³a siê!");
 					}
 				}
 			}
@@ -257,32 +259,32 @@ public class UpdateClientFrame extends JFrame {
 					if (peselField.getText().trim().compareTo("") == 0) { lblPesel.setForeground(Color.RED); correctData = false; }
 					if (phoneField.getText().trim().compareTo("") == 0) { lblPhone.setForeground(Color.RED); correctData = false; }
 					if (surnameField.getText().trim().compareTo("") == 0) { lblSurname.setForeground(Color.RED); correctData = false; }
-					
-					if (correctData) {
-							GenerateData.updateClient(Application.getClientsTable().getValueAt(row, 0).toString(), nameField.getText(),
-														surnameField.getText(), peselField.getText(), emailField.getText(), phoneField.getText());
-							
-							
-							try {
-								ArrayList<String> resp = GenerateData.gibClientDataPls();
-								String col[] = {"ID Klienta", "Imie", "Nazwisko", "PESEL", "E-mail", "Nr. telefonu"};
-								DefaultTableModel tableModel = new DefaultTableModel(col, 0);
-								
-								Application.getClientsTable().setModel(tableModel);
+					try {
+						if (correctData) {
+								Application.functions.updateClient(Application.getClientsTable().getValueAt(row, 0).toString(), nameField.getText(),
+															surnameField.getText(), peselField.getText(), emailField.getText(), phoneField.getText());
 								
 								
-								for (int i = 0; i < resp.size(); i++) {
-									String[] data = resp.get(i).split("\t");
-									tableModel.addRow(data);
-								}
-							
-							} catch (Exception e1) {
-								// TODO Auto-generated catch block
-								e1.printStackTrace();
-							}
-							
-							frame.setEnabled(true);
-							dispose();
+	
+								ArrayList<String> resp =Application.functions.getTableContent("KLIENCI");
+									String col[] = {"ID Klienta", "Imie", "Nazwisko", "PESEL", "E-mail", "Nr. telefonu"};
+									DefaultTableModel tableModel = new DefaultTableModel(col, 0);
+									
+									Application.getClientsTable().setModel(tableModel);
+									
+									
+									for (int i = 0; i < resp.size(); i++) {
+										String[] data = resp.get(i).split("\t");
+										tableModel.addRow(data);
+									}
+								
+	
+								
+								frame.setEnabled(true);
+								dispose();
+						}
+					}catch (Exception e1) {
+						JOptionPane.showMessageDialog(null, "Wyst¹pi³ b³¹d, operacja nie powiod³a siê!");
 					}
 				}
 			}
@@ -308,32 +310,32 @@ public class UpdateClientFrame extends JFrame {
 					if (peselField.getText().trim().compareTo("") == 0) { lblPesel.setForeground(Color.RED); correctData = false; }
 					if (phoneField.getText().trim().compareTo("") == 0) { lblPhone.setForeground(Color.RED); correctData = false; }
 					if (surnameField.getText().trim().compareTo("") == 0) { lblSurname.setForeground(Color.RED); correctData = false; }
-					
-					if (correctData) {
-							GenerateData.updateClient(Application.getClientsTable().getValueAt(row, 0).toString(), nameField.getText(),
-														surnameField.getText(), peselField.getText(), emailField.getText(), phoneField.getText());
-							
-							
-							try {
-								ArrayList<String> resp = GenerateData.gibClientDataPls();
-								String col[] = {"ID Klienta", "Imie", "Nazwisko", "PESEL", "E-mail", "Nr. telefonu"};
-								DefaultTableModel tableModel = new DefaultTableModel(col, 0);
-								
-								Application.getClientsTable().setModel(tableModel);
+					try {
+						if (correctData) {
+								Application.functions.updateClient(Application.getClientsTable().getValueAt(row, 0).toString(), nameField.getText(),
+															surnameField.getText(), peselField.getText(), emailField.getText(), phoneField.getText());
 								
 								
-								for (int i = 0; i < resp.size(); i++) {
-									String[] data = resp.get(i).split("\t");
-									tableModel.addRow(data);
-								}
-							
-							} catch (Exception e1) {
-								// TODO Auto-generated catch block
-								e1.printStackTrace();
-							}
-							
-							frame.setEnabled(true);
-							dispose();
+	
+								ArrayList<String> resp =Application.functions.getTableContent("KLIENCI");
+									String col[] = {"ID Klienta", "Imie", "Nazwisko", "PESEL", "E-mail", "Nr. telefonu"};
+									DefaultTableModel tableModel = new DefaultTableModel(col, 0);
+									
+									Application.getClientsTable().setModel(tableModel);
+									
+									
+									for (int i = 0; i < resp.size(); i++) {
+										String[] data = resp.get(i).split("\t");
+										tableModel.addRow(data);
+									}
+								
+	
+								
+								frame.setEnabled(true);
+								dispose();
+						}
+					}catch (Exception e1) {
+						JOptionPane.showMessageDialog(null, "Wyst¹pi³ b³¹d, operacja nie powiod³a siê!");
 					}
 				}
 			}
@@ -368,35 +370,33 @@ public class UpdateClientFrame extends JFrame {
 				if (peselField.getText().trim().compareTo("") == 0) { lblPesel.setForeground(Color.RED); correctData = false; }
 				if (phoneField.getText().trim().compareTo("") == 0) { lblPhone.setForeground(Color.RED); correctData = false; }
 				if (surnameField.getText().trim().compareTo("") == 0) { lblSurname.setForeground(Color.RED); correctData = false; }
-				
-				if (correctData) {
-						Application.functions.updateClient(Application.getClientsTable().getValueAt(row, 0).toString(), nameField.getText(),
-													surnameField.getText(), peselField.getText(), emailField.getText(), phoneField.getText());
-						
-						
-						try {
-							ArrayList<String> resp = Application.functions.getTableContent("KLIENCI");
-							String col[] = {"ID Klienta", "Imie", "Nazwisko", "PESEL", "E-mail", "Nr. telefonu"};
-							DefaultTableModel tableModel = new DefaultTableModel(col, 0);
-							
-							Application.getClientsTable().setModel(tableModel);
+				try {
+					if (correctData) {
+							Application.functions.updateClient(Application.getClientsTable().getValueAt(row, 0).toString(), nameField.getText(),
+														surnameField.getText(), peselField.getText(), emailField.getText(), phoneField.getText());
 							
 							
-							for (int i = 0; i < resp.size(); i++) {
-								String[] data = resp.get(i).split("\t");
-								tableModel.addRow(data);
-							}
-						
-						} catch (Exception e1) {
-							// TODO Auto-generated catch block
-							e1.printStackTrace();
-						}
-						
 
+							ArrayList<String> resp =Application.functions.getTableContent("KLIENCI");
+								String col[] = {"ID Klienta", "Imie", "Nazwisko", "PESEL", "E-mail", "Nr. telefonu"};
+								DefaultTableModel tableModel = new DefaultTableModel(col, 0);
+								
+								Application.getClientsTable().setModel(tableModel);
+								
+								
+								for (int i = 0; i < resp.size(); i++) {
+									String[] data = resp.get(i).split("\t");
+									tableModel.addRow(data);
+								}
+							
+
+							
+							frame.setEnabled(true);
+							dispose();
+					}
+				}catch (Exception e1) {
+					JOptionPane.showMessageDialog(null, "Wyst¹pi³ b³¹d, operacja nie powiod³a siê!");
 				}
-				
-				frame.setEnabled(true);
-				dispose();
 			}
 		});
 		btnUpdate.setBounds(344, 281, 132, 29);

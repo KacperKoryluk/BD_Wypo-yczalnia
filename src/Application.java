@@ -9,6 +9,7 @@ import javax.swing.JPanel;
 import javax.swing.JButton;
 import javax.swing.JPasswordField;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.event.ListSelectionEvent;
@@ -88,9 +89,6 @@ public class Application {
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
-		GenerateData.generateClients();
-		GenerateData.generateBoo();
-		GenerateData.generateEq();
 		
 		Font font1 = new Font("Tahoma", Font.PLAIN, 18);
 		Font font2 = new Font("Tahoma", Font.PLAIN, 11);
@@ -100,7 +98,7 @@ public class Application {
 	//	UIManager.put("CheckBox.font", /* font of your liking */);
 	//	UIManager.put("ColorChooser.font", /* font of your liking */);
 	//	UIManager.put("ComboBox.font", /* font of your liking */);
-		UIManager.put("Label.font", font1);
+		UIManager.put("Label.font", font2);
 	//	UIManager.put("List.font", /* font of your liking */);
 	//	UIManager.put("MenuBar.font", /* font of your liking */);
 	//	UIManager.put("MenuItem.font", /* font of your liking */);
@@ -125,6 +123,7 @@ public class Application {
 	//	UIManager.put("ToolBar.font", /* font of your liking */);
 	//	UIManager.put("ToolTip.font", /* font of your liking */);
 	//	UIManager.put("Tree.font", /* font of your liking */);
+		
 		frame = new JFrame();
 		frame.setResizable(false);
 		frame.setBounds(100, 100, 655, 532);
@@ -153,6 +152,32 @@ public class Application {
 		menuPanel.add(btnBooking);
 		
 		JButton btnStatistics = new JButton("Statystyki");
+		btnStatistics.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				StatisticsFrame frame2 = new StatisticsFrame(frame);
+				try {
+					ArrayList<String> resp = functions.getTableContent("KLIENCI");
+					frame2.getLblClientsCount().setText(Integer.toString(resp.size()));
+					
+					resp = functions.getTableContent("SPRZET");
+					frame2.getLblEqCount().setText(Integer.toString(resp.size()));
+					
+					resp = functions.getBookingsByStatus("OPLACONA");
+					frame2.getLblBooPayedCount().setText(Integer.toString(resp.size()));
+					
+					resp = functions.getBookingsByStatus("NIEOPLACONA");
+					frame2.getLblBooNotPayedCount().setText(Integer.toString(resp.size()));
+					
+					resp = functions.getBookingsByStatus("ARCHIWUM");
+					frame2.getLblBooArchCount().setText(Integer.toString(resp.size()));
+					
+					frame2.setVisible(true);
+					frame.setEnabled(false);
+				}catch (Exception e) {
+					JOptionPane.showMessageDialog(null, "Wyst¹pi³ b³¹d, operacja nie powiod³a siê!");
+				}
+			}
+		});
 		btnStatistics.setBounds(321, 242, 174, 63);
 		menuPanel.add(btnStatistics);
 		
@@ -165,6 +190,31 @@ public class Application {
 		});
 		btnMenuLogout.setBounds(472, 412, 122, 51);
 		menuPanel.add(btnMenuLogout);
+		
+		JButton btnNotPayed = new JButton("Zaleg\u0142e op\u0142aty");
+		btnNotPayed.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				NotPayedBookingsFrame frame2 = new NotPayedBookingsFrame(frame);
+				
+				frame2.setVisible(true);
+				frame.setEnabled(false);
+				
+				String col[] = {"ID Klienta", "Imie", "Nazwisko", "ID Rezerwacji", "Data wygaœniêcia", "Numer telefonu"};
+				DefaultTableModel tableModel = new DefaultTableModel(col, 0);
+				
+				frame2.getNotPayedTable().setModel(tableModel);
+				
+				ArrayList<String> resp = functions.getTableContent("ZALEGLE_REZERWACJE");
+				
+				for (int i = 0; i < resp.size(); i++) {
+					String[] data = resp.get(i).split("\t");
+					tableModel.addRow(data);
+				}
+				
+			}
+		});
+		btnNotPayed.setBounds(211, 342, 174, 63);
+		menuPanel.add(btnNotPayed);
 		menuPanel.setVisible(false);
 
 		
@@ -176,11 +226,13 @@ public class Application {
 		lblLogin.setHorizontalAlignment(SwingConstants.CENTER);
 		lblLogin.setBounds(263, 83, 89, 25);
 		mainPanel.add(lblLogin);
+		lblLogin.setFont(font1);
 		
 		JLabel lblPassword = new JLabel("Has\u0142o");
 		lblPassword.setHorizontalAlignment(SwingConstants.CENTER);
 		lblPassword.setBounds(263, 181, 89, 27);
 		mainPanel.add(lblPassword);
+		lblPassword.setFont(font1);
 		
 		JButton btnZaloguj = new JButton("Zaloguj");
 		btnZaloguj.addKeyListener(new KeyAdapter() {
@@ -343,8 +395,7 @@ public class Application {
 					}
 				
 				} catch (Exception e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
+					JOptionPane.showMessageDialog(null, "Wyst¹pi³ b³¹d, operacja nie powiod³a siê!");
 				}
 				
 			}
@@ -357,13 +408,18 @@ public class Application {
 			public void actionPerformed(ActionEvent arg0) {
 				UpdateClientFrame frame2 = new UpdateClientFrame(frame);
 				int row = clientsTable.getSelectedRow();
-				frame2.getNameField().setText(clientsTable.getValueAt(row, 1).toString());
-				frame2.getSurnameField().setText(clientsTable.getValueAt(row, 2).toString());
-				frame2.getEmailField().setText(clientsTable.getValueAt(row, 4).toString());
-				frame2.getPeselField().setText(clientsTable.getValueAt(row, 3).toString());
-				frame2.getPhoneField().setText(clientsTable.getValueAt(row, 5).toString());
-				frame2.setVisible(true);
-				frame.setEnabled(false);
+				try {
+					frame2.getNameField().setText(clientsTable.getValueAt(row, 1).toString());
+					frame2.getSurnameField().setText(clientsTable.getValueAt(row, 2).toString());
+					frame2.getEmailField().setText(clientsTable.getValueAt(row, 4).toString());
+					frame2.getPeselField().setText(clientsTable.getValueAt(row, 3).toString());
+					frame2.getPhoneField().setText(clientsTable.getValueAt(row, 5).toString());
+					frame2.setVisible(true);
+					frame.setEnabled(false);
+				} catch (Exception e) {
+					JOptionPane.showMessageDialog(null, "Wyst¹pi³ b³¹d, operacja nie powiod³a siê!");
+				}
+
 			}
 		});
 		btnUpdate.setBounds(228, 398, 161, 45);
@@ -436,7 +492,6 @@ public class Application {
 						}
 					
 					} catch (Exception e1) {
-						// TODO Auto-generated catch block
 						e1.printStackTrace();
 					}
 				}
@@ -467,11 +522,11 @@ public class Application {
 		btnDeleteEq.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
-				
+				try {
 				String ID = eqDetailsTable.getValueAt(eqDetailsTable.getSelectedRow(), 0).toString();
 				String category = eqDetailsTable.getValueAt(eqDetailsTable.getSelectedRow(), 3).toString();
 				functions.deleteEquipment(ID);
-				try {
+
 					ArrayList<String> resp = functions.getEqByCategory();
 					String col[] = {"Kategoria", "Iloœæ"};
 					DefaultTableModel tableModel = new DefaultTableModel(col, 0);
@@ -483,16 +538,11 @@ public class Application {
 						String[] data = resp.get(i).split("\t");
 						tableModel.addRow(data);
 					}
-				} catch (Exception e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-				
-				try {
-					ArrayList<String> resp = functions.getEqByCategory(category);
+
+					 resp = functions.getEqByCategory(category);
 					
-					String col[] = {"ID_SPRZETU", "ID_REZERWACJI", "STATUS", "KATEGORIA", "OPIS_SPRZETU"};
-					DefaultTableModel tableModel = new DefaultTableModel(col, 0);
+					String col2[] = {"ID_SPRZETU", "ID_REZERWACJI", "STATUS", "KATEGORIA", "OPIS_SPRZETU"};
+					tableModel = new DefaultTableModel(col2, 0);
 					
 					eqDetailsTable.setModel(tableModel);
 					
@@ -501,10 +551,8 @@ public class Application {
 						String[] data = resp.get(i).split("\t");
 						tableModel.addRow(data);
 					}
-				
 				} catch (Exception e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
+					JOptionPane.showMessageDialog(null, "Wyst¹pi³ b³¹d, operacja nie powiod³a siê!");
 				}
 				
 			}
@@ -515,12 +563,16 @@ public class Application {
 		JButton btnUpdateEq = new JButton("Aktualizuj");
 		btnUpdateEq.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				UpdateEqFrame frame2 = new UpdateEqFrame(frame);
-				int row = eqDetailsTable.getSelectedRow();
-				frame2.getCatField().setText(eqDetailsTable.getValueAt(row, 3).toString());
-				frame2.getDescField().setText(eqDetailsTable.getValueAt(row, 4).toString());
-				frame2.setVisible(true);
-				frame.setEnabled(false);
+				try {
+					UpdateEqFrame frame2 = new UpdateEqFrame(frame);
+					int row = eqDetailsTable.getSelectedRow();
+					frame2.getCatField().setText(eqDetailsTable.getValueAt(row, 3).toString());
+					frame2.getDescField().setText(eqDetailsTable.getValueAt(row, 4).toString());
+					frame2.setVisible(true);
+					frame.setEnabled(false);
+				}catch (Exception e1) {
+					JOptionPane.showMessageDialog(null, "Wyst¹pi³ b³¹d, operacja nie powiod³a siê!");
+				}
 			}
 		});
 		btnUpdateEq.setBounds(463, 402, 145, 37);
@@ -628,14 +680,12 @@ public class Application {
 			public void actionPerformed(ActionEvent e) {
 				int row = bookingTable.getSelectedRow();
 
-				
+				try {
 				functions.updateBooking(bookingTable.getValueAt(row, 0).toString(),
 										bookingTable.getValueAt(row, 1).toString(),
 										bookingTable.getValueAt(row, 2).toString().split("\\.")[0],
 										"OPLACONA",
 										bookingTable.getValueAt(row, 4).toString().split("\\.")[0]);
-				
-				try {
 					ArrayList<String> resp = functions.getBookingsByStatus("OPLACONA");
 					ArrayList<String> resp2 = functions.getBookingsByStatus("NIEOPLACONA");
 					String col[] = {"ID Rezewacji", "ID Klienta" , "Data rezerwacji", "Status", "Data wygasniecia"};
@@ -653,7 +703,7 @@ public class Application {
 						tableModel.addRow(data);
 					}
 				} catch (Exception e1) {
-					e1.printStackTrace();
+					JOptionPane.showMessageDialog(null, "Wyst¹pi³ b³¹d, operacja nie powiod³a siê!");
 				}
 			}
 		});
@@ -665,7 +715,12 @@ public class Application {
 			public void actionPerformed(ActionEvent arg0) {
 				int row = bookingTable.getSelectedRow();
 
-				
+
+				try {
+					if (bookingTable.getValueAt(row, 3).toString().compareTo("NIEOPLACONA") == 0) {
+						JOptionPane.showMessageDialog(null, "Nie mo¿na archiwizowaæ\nnieop³aconych rezerwacji!");
+						return;
+					}
 				functions.updateBooking(bookingTable.getValueAt(row, 0).toString(),
 										bookingTable.getValueAt(row, 1).toString(),
 										bookingTable.getValueAt(row, 2).toString().split("\\.")[0],
@@ -674,8 +729,6 @@ public class Application {
 				
 				functions.freeEquipment(bookingTable.getValueAt(row, 0).toString());
 				
-				
-				try {
 					ArrayList<String> resp = functions.getBookingsByStatus("OPLACONA");
 					ArrayList<String> resp2 = functions.getBookingsByStatus("NIEOPLACONA");
 					String col[] = {"ID Rezewacji", "ID Klienta" , "Data rezerwacji", "Status", "Data wygasniecia"};
@@ -706,7 +759,7 @@ public class Application {
 						tableModel2.addRow(data);
 					}
 				} catch (Exception e1) {
-					e1.printStackTrace();
+					JOptionPane.showMessageDialog(null, "Wyst¹pi³ b³¹d, operacja nie powiod³a siê!");
 				}
 			}
 		});
@@ -734,21 +787,23 @@ public class Application {
 		btnDeleteBoo.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				int row = booArchTable.getSelectedRow();
-				
-				functions.deleteBooking(booArchTable.getValueAt(row, 0).toString());
-				
-				ArrayList<String> resp = functions.getBookingsByStatus("ARCHIWUM");
-				String col[] = {"ID Rezewacji", "ID Klienta" , "Data rezerwacji", "Status", "Data wygasniecia"};
-				DefaultTableModel tableModel = new DefaultTableModel(col, 0);
-				
-				booArchTable.setModel(tableModel);
-				
-				
-				for (int i = 0; i < resp.size(); i++) {
-					String[] data = resp.get(i).split("\t");
-					tableModel.addRow(data);
+				try {
+					functions.deleteBooking(booArchTable.getValueAt(row, 0).toString());
+					
+					ArrayList<String> resp = functions.getBookingsByStatus("ARCHIWUM");
+					String col[] = {"ID Rezewacji", "ID Klienta" , "Data rezerwacji", "Status", "Data wygasniecia"};
+					DefaultTableModel tableModel = new DefaultTableModel(col, 0);
+					
+					booArchTable.setModel(tableModel);
+					
+					
+					for (int i = 0; i < resp.size(); i++) {
+						String[] data = resp.get(i).split("\t");
+						tableModel.addRow(data);
+					}
+				}catch (Exception e1) {
+					JOptionPane.showMessageDialog(null, "Wyst¹pi³ b³¹d, operacja nie powiod³a siê!");
 				}
-				
 			}
 		});
 		btnDeleteBoo.setBounds(488, 415, 101, 33);
@@ -772,8 +827,7 @@ public class Application {
 						tableModel.addRow(data);
 					}
 				} catch (Exception e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
+					JOptionPane.showMessageDialog(null, "Wyst¹pi³ b³¹d, operacja nie powiod³a siê!");
 				}
 			}
 		});
@@ -801,14 +855,10 @@ public class Application {
 						String[] data = resp2.get(i).split("\t");
 						tableModel.addRow(data);
 					}
-				} catch (Exception e1) {
-					e1.printStackTrace();
-				}
 				
-				try {
-					ArrayList<String> resp = functions.getBookingsByStatus("ARCHIWUM");
-					String col[] = {"ID Rezewacji", "ID Klienta" , "Data rezerwacji", "Status", "Data wygasniecia"};
-					DefaultTableModel tableModel = new DefaultTableModel(col, 0);
+					resp = functions.getBookingsByStatus("ARCHIWUM");
+					String col2[] = {"ID Rezewacji", "ID Klienta" , "Data rezerwacji", "Status", "Data wygasniecia"};
+					tableModel = new DefaultTableModel(col2, 0);
 					
 					booArchTable.setModel(tableModel);
 					
@@ -818,8 +868,7 @@ public class Application {
 						tableModel.addRow(data);
 					}
 				} catch (Exception e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
+					JOptionPane.showMessageDialog(null, "Wyst¹pi³ b³¹d, operacja nie powiod³a siê!");
 				}
 			}
 		});
@@ -916,8 +965,7 @@ public class Application {
 					}
 				
 				} catch (Exception e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
+					JOptionPane.showMessageDialog(null, "Wyst¹pi³ b³¹d, operacja nie powiod³a siê!");
 				}
 				
 			}

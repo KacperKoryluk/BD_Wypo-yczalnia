@@ -9,6 +9,7 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.JTextField;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
@@ -29,6 +30,7 @@ public class AddEqFrame extends JFrame {
 	 * Create the frame.
 	 */
 	public AddEqFrame(JFrame frame) {
+		setResizable(false);
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		addWindowListener(new WindowAdapter()
 		{
@@ -83,54 +85,47 @@ public class AddEqFrame extends JFrame {
 				if (catField.getText().trim().compareTo("") == 0) { lblCat.setForeground(Color.RED); correctData = false; }
 				if ((text = descField.getText().trim()).compareTo("") == 0)  text = "";
 
-				
-				if (correctData) {
-					String ID = Integer.toString(GUIMethods.hashIDEq(catField.getText(), text , 99999));
-					
-					Application.functions.addEquipment(ID, null, "DOSTEPNY", catField.getText(), text);
-					
-					
-					try {
-						ArrayList<String> resp = Application.functions.getEqByCategory();
-						String col[] = {"Kategoria", "Iloœæ"};
-						DefaultTableModel tableModel = new DefaultTableModel(col, 0);
+				try {
+					if (correctData) {
+						String ID = Integer.toString(GUIMethods.hashIDEq(catField.getText(), text , 99999));
 						
-						Application.getEquipmentTable().setModel(tableModel);
+						Application.functions.addEquipment(ID, null, "DOSTEPNY", catField.getText(), text);
 						
 						
-						for (int i = 0; i < resp.size(); i++) {
-							String[] data = resp.get(i).split("\t");
-							tableModel.addRow(data);
+	
+							ArrayList<String> resp = Application.functions.getEqByCategory();
+							String col[] = {"Kategoria", "Iloœæ"};
+							DefaultTableModel tableModel = new DefaultTableModel(col, 0);
+							
+							Application.getEquipmentTable().setModel(tableModel);
+							
+							
+							for (int i = 0; i < resp.size(); i++) {
+								String[] data = resp.get(i).split("\t");
+								tableModel.addRow(data);
+							}
+	
+							resp = Application.functions.getEqByCategory(catField.getText().trim());
+							
+							String col1[] = {"ID_SPRZETU", "ID_REZERWACJI", "STATUS", "KATEGORIA", "OPIS_SPRZETU"};
+							tableModel = new DefaultTableModel(col1, 0);
+							
+							Application.getEqDetailsTable().setModel(tableModel);
+							
+							
+							for (int i = 0; i < resp.size(); i++) {
+								String[] data = resp.get(i).split("\t");
+								tableModel.addRow(data);
+							}
 						}
 					} catch (Exception e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					}
-					try {
-						ArrayList<String> resp = Application.functions.getEqByCategory(catField.getText().trim());
-						
-						String col[] = {"ID_SPRZETU", "ID_REZERWACJI", "STATUS", "KATEGORIA", "OPIS_SPRZETU"};
-						DefaultTableModel tableModel = new DefaultTableModel(col, 0);
-						
-						Application.getEqDetailsTable().setModel(tableModel);
-						
-						
-						for (int i = 0; i < resp.size(); i++) {
-							String[] data = resp.get(i).split("\t");
-							tableModel.addRow(data);
-						}
-					
-					} catch (Exception e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
+						JOptionPane.showMessageDialog(null, "Wyst¹pi³ b³¹d, operacja nie powiod³a siê!");
 					}
 					
 					catField.setText("");
 					descField.setText("");
 					
 				}
-				
-			}
 		});
 		btnAdd.setMnemonic(KeyEvent.VK_ENTER);
 		btnAdd.setBounds(341, 231, 99, 30);

@@ -1,5 +1,3 @@
-import java.awt.BorderLayout;
-import java.awt.EventQueue;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.ArrayList;
@@ -20,10 +18,15 @@ import java.awt.Color;
 
 import javax.swing.JTextField;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
 
 public class AddBookingFrame extends JFrame {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	private static int hash;
 	private JTable eqTable;
@@ -50,6 +53,7 @@ public class AddBookingFrame extends JFrame {
 	 * Create the frame.
 	 */
 	public AddBookingFrame(JFrame frame) {
+		setResizable(false);
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		addWindowListener(new WindowAdapter()
 		{
@@ -73,39 +77,42 @@ public class AddBookingFrame extends JFrame {
 		btnAdd.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				int[] rows = eqTable.getSelectedRows();
-				
-				if (rows.length != 0) {
-					
-					for (int i = 0; i < rows.length; i++) {
-						Application.functions.updateEquipment(eqTable.getValueAt(rows[i], 0).toString(),
-															Integer.toString(hash),
-															"DOSTEPNY",
-															eqTable.getValueAt(rows[i], 1).toString(), 
-															eqTable.getValueAt(rows[i], 2).toString());
+				try {
+					if (rows.length != 0) {
+						
+						for (int i = 0; i < rows.length; i++) {
+							Application.functions.updateEquipment(eqTable.getValueAt(rows[i], 0).toString(),
+																Integer.toString(hash),
+																"DOSTEPNY",
+																eqTable.getValueAt(rows[i], 1).toString(), 
+																eqTable.getValueAt(rows[i], 2).toString());
+						}
+						
+						
+						
+						String col[] = {"ID", "Kategoria", "Opis"};
+						DefaultTableModel tableModel = new DefaultTableModel(col, 0);
+						DefaultTableModel tableModel2 = new DefaultTableModel(col, 0);
+						
+						
+						ArrayList<String> resp = Application.functions.getEqByOrder(Integer.toString(hash));
+						booEqTable.setModel(tableModel);
+						
+						for (int i = 0; i < resp.size(); i++) {
+							String[] data = resp.get(i).split("\t");
+							tableModel.addRow(data);
+						}
+						
+						resp = Application.functions.getEqByOrderNull();
+						eqTable.setModel(tableModel2);
+						
+						for (int i = 0; i < resp.size(); i++) {
+							String[] data = resp.get(i).split("\t");
+							tableModel2.addRow(data);
+						}
 					}
-					
-					
-					
-					String col[] = {"ID", "Kategoria", "Opis"};
-					DefaultTableModel tableModel = new DefaultTableModel(col, 0);
-					DefaultTableModel tableModel2 = new DefaultTableModel(col, 0);
-					
-					
-					ArrayList<String> resp = Application.functions.getEqByOrder(Integer.toString(hash));
-					booEqTable.setModel(tableModel);
-					
-					for (int i = 0; i < resp.size(); i++) {
-						String[] data = resp.get(i).split("\t");
-						tableModel.addRow(data);
-					}
-					
-					resp = Application.functions.getEqByOrderNull();
-					eqTable.setModel(tableModel2);
-					
-					for (int i = 0; i < resp.size(); i++) {
-						String[] data = resp.get(i).split("\t");
-						tableModel2.addRow(data);
-					}
+				}catch (Exception e1) {
+					JOptionPane.showMessageDialog(null, "Wyst¹pi³ b³¹d, operacja nie powiod³a siê!");
 				}
 			}
 		});
@@ -116,32 +123,35 @@ public class AddBookingFrame extends JFrame {
 		btnRem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				int[] rows = booEqTable.getSelectedRows();
-				
-				if (rows.length != 0) {
-					
-					Application.functions.freeEquipment(Integer.toString(hash));
-					
-					
-					
-					String col[] = {"ID", "Kategoria", "Opis"};
-					DefaultTableModel tableModel = new DefaultTableModel(col, 0);
-					DefaultTableModel tableModel2 = new DefaultTableModel(col, 0);
-					
-					ArrayList<String> resp = Application.functions.getEqByOrderNull();
-					eqTable.setModel(tableModel);
-					
-					for (int i = 0; i < resp.size(); i++) {
-						String[] data = resp.get(i).split("\t");
-						tableModel.addRow(data);
+				try {
+					if (rows.length != 0) {
+						
+						Application.functions.freeEquipment(Integer.toString(hash));
+						
+						
+						
+						String col[] = {"ID", "Kategoria", "Opis"};
+						DefaultTableModel tableModel = new DefaultTableModel(col, 0);
+						DefaultTableModel tableModel2 = new DefaultTableModel(col, 0);
+						
+						ArrayList<String> resp = Application.functions.getEqByOrderNull();
+						eqTable.setModel(tableModel);
+						
+						for (int i = 0; i < resp.size(); i++) {
+							String[] data = resp.get(i).split("\t");
+							tableModel.addRow(data);
+						}
+						
+						resp = Application.functions.getEqByOrder(Integer.toString(hash));
+						booEqTable.setModel(tableModel2);
+						
+						for (int i = 0; i < resp.size(); i++) {
+							String[] data = resp.get(i).split("\t");
+							tableModel2.addRow(data);
+						}
 					}
-					
-					resp = Application.functions.getEqByOrder(Integer.toString(hash));
-					booEqTable.setModel(tableModel2);
-					
-					for (int i = 0; i < resp.size(); i++) {
-						String[] data = resp.get(i).split("\t");
-						tableModel2.addRow(data);
-					}
+				}catch (Exception e1) {
+					JOptionPane.showMessageDialog(null, "Wyst¹pi³ b³¹d, operacja nie powiod³a siê!");
 				}
 			}
 		});
@@ -151,15 +161,16 @@ public class AddBookingFrame extends JFrame {
 		JButton btnBack2 = new JButton("Wr\u00F3\u0107");
 		btnBack2.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
-				int[] rows = booEqTable.getSelectedRows();
-				
-				Application.functions.freeEquipment(Integer.toString(hash));
-				
-				Application.functions.deleteBooking(Integer.toString(hash));
-				
-				frame.setEnabled(true);
-				dispose();
+				try {
+					Application.functions.freeEquipment(Integer.toString(hash));
+					
+					Application.functions.deleteBooking(Integer.toString(hash));
+					
+					frame.setEnabled(true);
+					dispose();
+				}catch (Exception e1) {
+					JOptionPane.showMessageDialog(null, "Wyst¹pi³ b³¹d, operacja nie powiod³a siê!");
+				}
 			}
 		});
 		btnBack2.setBounds(10, 381, 95, 31);
@@ -169,50 +180,53 @@ public class AddBookingFrame extends JFrame {
 		btnAcc.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				int[] rows = booEqTable.getSelectedRows();
-				
-				if (rows.length != 0) {
-					
-					for (int i = 0; i < rows.length; i++) {
-						Application.functions.updateEquipment(eqTable.getValueAt(rows[i], 0).toString(),
-															Integer.toString(hash),
-															"NIEDOSTEPNY",
-															eqTable.getValueAt(rows[i], 1).toString(), 
-															eqTable.getValueAt(rows[i], 2).toString());
+				try {
+					if (rows.length != 0) {
+						
+						for (int i = 0; i < rows.length; i++) {
+							Application.functions.updateEquipment(eqTable.getValueAt(rows[i], 0).toString(),
+																Integer.toString(hash),
+																"NIEDOSTEPNY",
+																eqTable.getValueAt(rows[i], 1).toString(), 
+																eqTable.getValueAt(rows[i], 2).toString());
+						}
 					}
+					
+					
+					ArrayList<String> resp = Application.functions.getBookingsByStatus("OPLACONA");
+					ArrayList<String> resp2 = Application.functions.getBookingsByStatus("NIEOPLACONA");
+					String col[] = {"ID Rezewacji", "ID Sprzetu" , "Data rezerwacji", "Status", "Data wygasniecia"};
+					DefaultTableModel tableModel = new DefaultTableModel(col, 0);
+					
+					Application.getBookingTable().setModel(tableModel);
+					
+					
+					for (int i = 0; i < resp.size(); i++) {
+						String[] data = resp.get(i).split("\t");
+						tableModel.addRow(data);
+					}
+					for (int i = 0; i < resp2.size(); i++) {
+						String[] data = resp2.get(i).split("\t");
+						tableModel.addRow(data);
+					}
+					
+					
+					resp = Application.functions.getBookingsByStatus("ARCHIWUM");
+					DefaultTableModel tableModel2 = new DefaultTableModel(col, 0);
+					
+					Application.getBooArchTable().setModel(tableModel2);
+					
+					
+					for (int i = 0; i < resp.size(); i++) {
+						String[] data = resp.get(i).split("\t");
+						tableModel2.addRow(data);
+					}
+					
+					frame.setEnabled(true);
+					dispose();
+				}catch (Exception e1) {
+					JOptionPane.showMessageDialog(null, "Wyst¹pi³ b³¹d, operacja nie powiod³a siê!");
 				}
-				
-				
-				ArrayList<String> resp = Application.functions.getBookingsByStatus("OPLACONA");
-				ArrayList<String> resp2 = Application.functions.getBookingsByStatus("NIEOPLACONA");
-				String col[] = {"ID Rezewacji", "ID Sprzetu" , "Data rezerwacji", "Status", "Data wygasniecia"};
-				DefaultTableModel tableModel = new DefaultTableModel(col, 0);
-				
-				Application.getBookingTable().setModel(tableModel);
-				
-				
-				for (int i = 0; i < resp.size(); i++) {
-					String[] data = resp.get(i).split("\t");
-					tableModel.addRow(data);
-				}
-				for (int i = 0; i < resp2.size(); i++) {
-					String[] data = resp2.get(i).split("\t");
-					tableModel.addRow(data);
-				}
-				
-				
-				resp = Application.functions.getBookingsByStatus("ARCHIWUM");
-				DefaultTableModel tableModel2 = new DefaultTableModel(col, 0);
-				
-				Application.getBooArchTable().setModel(tableModel2);
-				
-				
-				for (int i = 0; i < resp.size(); i++) {
-					String[] data = resp.get(i).split("\t");
-					tableModel2.addRow(data);
-				}
-				
-				frame.setEnabled(true);
-				dispose();
 			}
 		});
 		btnAcc.setBounds(452, 381, 123, 31);
@@ -298,13 +312,17 @@ public class AddBookingFrame extends JFrame {
 				lblExp.setForeground(Color.BLACK);
 				boolean correctData = true;
 				if (dateField.getText().trim().compareTo("") == 0) { lblExp.setForeground(Color.RED); correctData = false; }
-				if (correctData) {
-				int row = clientTable.getSelectedRow();
-				Application.functions.addBooking(Integer.toString(hash),
-						clientTable.getValueAt(row, 0).toString(), 
-						dateField.getText());
-				clientPanel.setVisible(false);
-				mainPanel.setVisible(true);
+				try {
+					if (correctData) {
+					int row = clientTable.getSelectedRow();
+					Application.functions.addBooking(Integer.toString(hash),
+							clientTable.getValueAt(row, 0).toString(), 
+							dateField.getText());
+					clientPanel.setVisible(false);
+					mainPanel.setVisible(true);
+					}
+				}catch (Exception e1) {
+					JOptionPane.showMessageDialog(null, "Wyst¹pi³ b³¹d, operacja nie powiod³a siê!");
 				}
 			}
 		});

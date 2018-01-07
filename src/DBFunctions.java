@@ -63,7 +63,7 @@ public class DBFunctions {
 		try 
 		{
 			stmt = con.createStatement();																											//Format YY-MM-DD
-			rows = stmt.executeUpdate("insert into Rezerwacje (ID_REZERWACJI, ID_KLIENTA, DATA_WYGASNIECIA, STATUS) values ("+ ID + ", " + clientID +", "+"TO_DATE('" + expirationDate+"','YYYY-MM-DD HH24:MI:SS'), 'NIEOPLACONA')");
+			rows = stmt.executeUpdate("insert into Rezerwacje (ID_REZERWACJI, ID_KLIENTA, DATA_WYGASNIECIA, STATUS) values ("+ ID + ", " + clientID +", "+"TO_DATE('" + expirationDate+"','YY-MM-DD'), 'NIEOPLACONA')");
 			stmt.close();
 		}
 		catch(SQLException e)
@@ -410,6 +410,7 @@ public class DBFunctions {
 		
 		return result;
 	}
+	
 	
 	public ArrayList<String> getBooByID(String ID){
 		ArrayList<String> result = null;
