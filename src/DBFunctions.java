@@ -36,7 +36,41 @@ public class DBFunctions {
 		try 
 		{
 			stmt = con.createStatement();
-			rows = stmt.executeUpdate("insert into Klienci values ("+ ID + ", " + firstName +", "+lastName+", "+PESEL + ", "+eMail+", "+phoneNumber+")");
+			rows = stmt.executeUpdate("insert into Klienci values ("+ ID + ", '" + firstName +"', '"+lastName+"', "+PESEL + ", '"+eMail+"', "+phoneNumber+")");
+		}
+		catch(SQLException e)
+		{
+			e.printStackTrace();
+		}
+		
+		return rows;
+	}
+	
+	public int updateClient(String ID, String firstName, String lastName, String PESEL, String eMail, String phoneNumber)
+	{
+		Statement stmt = null;
+		int rows = -1;
+		try 
+		{
+			stmt = con.createStatement();
+			rows = stmt.executeUpdate("update Klienci set IMIE = '" + firstName +"', NAZWISKO = '"+lastName+"', PESEL = "+PESEL + ", E_MAIL = '"+eMail+"', NUMER_TELEFONU = "+phoneNumber+" where ID_KLIENTA = " + ID);
+		}
+		catch(SQLException e)
+		{
+			e.printStackTrace();
+		}
+		
+		return rows;
+	}
+	
+	public int updateEquipment(String ID, String bookingID, String status, String category, String description)
+	{
+		Statement stmt = null;
+		int rows = -1;
+		try 
+		{
+			stmt = con.createStatement();
+			rows = stmt.executeUpdate("update SPRZET set ID_REZERWACJI = " + bookingID +", STATUS = '"+status+"', KATEGORIA = '"+category + "', OPIS_SPRZETU = '"+description+" where ID_SPRZETU = " + ID);
 		}
 		catch(SQLException e)
 		{
@@ -86,7 +120,7 @@ public class DBFunctions {
 		try 
 		{
 			stmt = con.createStatement();
-			rows = stmt.executeUpdate("insert into Sprzet values ("+ ID + ", "+ bookingID + ", " + status +", "+category+", "+description+")");
+			rows = stmt.executeUpdate("insert into Sprzet values ("+ ID + ", "+ bookingID + ", '" + status +"', '"+category+"', '"+description+"')");
 		}
 		catch(SQLException e)
 		{
@@ -305,7 +339,7 @@ ArrayList<String> result = null;
 	
 	public ArrayList<String> groupBookingsByStatus()
 	{
-ArrayList<String> result = null;
+		ArrayList<String> result = null;
 		
 		try
 		{
@@ -318,6 +352,8 @@ ArrayList<String> result = null;
 		
 		return result;
 	}
+	
+	
 	
 	/**
 	 * 
