@@ -194,7 +194,7 @@ public class AddBookingFrame extends JFrame {
 					
 					ArrayList<String> resp = Application.functions.getBookingsByStatus("OPLACONA");
 					ArrayList<String> resp2 = Application.functions.getBookingsByStatus("NIEOPLACONA");
-					String col[] = {"ID Rezewacji", "ID Sprzetu" , "Data rezerwacji", "Status", "Data wygasniecia"};
+					String col[] = {"ID Rezewacji", "ID Klienta" , "Data rezerwacji", "Status", "Data wygasniecia"};
 					DefaultTableModel tableModel = new DefaultTableModel(col, 0);
 					
 					Application.getBookingTable().setModel(tableModel);
